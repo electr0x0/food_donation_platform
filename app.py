@@ -276,8 +276,7 @@ def create_user_groups():
     existing_groups = UserGroup.query.all()
     
     if existing_groups:
-        print("User groups already exist.")
-        return
+        return "User groups already exist."
     
     donator_group = UserGroup(name='donator', description='User group for donator users')
     db.session.add(donator_group)
@@ -291,7 +290,7 @@ def create_user_groups():
         return "User groups created successfully."
     except Exception as e:
         db.session.rollback()
-        return("Failed to create user groups.", e)
+        return f"Failed to create user groups. {e}"
 
 if __name__ == '__main__':
     with app.app_context():
