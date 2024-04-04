@@ -1,0 +1,105 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Template Page {% endblock %}
+
+{% block body_class %} index-page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% include 'includes/navigation.html' %}
+
+<div class="page-header min-vh-50 bg-gradient-faded-info-vertical">
+  <span class="mask bg-gradient-dark opacity-6"></span>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <div class="text-center">
+          <h1 class="text-white">Current Users</h1>
+          <h3 class="text-white">This Shows all available users</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+  <div class="container bg-gradient-faded-primary">
+    <!-- Main Content -->
+    <div class="section text-center">
+      <table class="table align-middle mb-0 bg-white">
+        <thead class="bg-gradient-faded-primary">
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Organization</th>
+            <th>Group</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.organization }}</td>
+            <td>{{ user.user_group_id }}</td>
+            <td>
+              <button type="button" class="btn btn-link btn-sm btn-rounded" data-bs-toggle="modal" data-bs-target="#editModal{{ user.id }}">Edit</button>
+            </td>
+          </tr>
+          <!-- Edit Modal -->
+          <div class="modal fade" id="editModal{{ user.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editModalLabel">Edit User</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <!-- Edit Form -->
+                  <form action="{{ url_for('edit_user', user_id=user.id) }}" method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" name="address" value="{{ user.address }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="organization" class="form-label">Organization</label>
+                        <input type="text" class="form-control" id="organization" name="organization" value="{{ user.organization }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="user_group_id" class="form-label">User Group ID</label>
+                        <input type="number" class="form-control" id="user_group_id" name="user_group_id" value="{{ user.user_group_id }}" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- Maine Content End -->
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

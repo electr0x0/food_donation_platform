@@ -1,0 +1,547 @@
+{% extends "dashboard/layouts/base.html" %}
+
+{% block title %} Donate Food {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css"
+  crossorigin="anonymous">
+
+<style>
+  .imagecontainer {
+    border-radius: 10px;
+    box-shadow: 4px 4px 30px rgba(0, 0, 0, .2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 5px;
+    background-color: rgba(0, 110, 255, 0.041);
+  }
+
+  .imageheader {
+    flex: 1;
+    width: 100%;
+    border: 2px dashed royalblue;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .imageheader svg {
+    height: 100px;
+  }
+
+  .imageheader p {
+    text-align: center;
+    color: black;
+  }
+
+  .imagefooter {
+    background-color: rgba(0, 110, 255, 0.075);
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: black;
+    border: none;
+  }
+
+  .imagefooter svg {
+    height: 130%;
+    fill: royalblue;
+    background-color: rgba(70, 66, 66, 0.103);
+    border-radius: 50%;
+    padding: 2px;
+    cursor: pointer;
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.205);
+  }
+
+  .imagefooter p {
+    flex: 1;
+    text-align: center;
+  }
+
+  #file {
+    display: none;
+  }
+</style>
+<style>
+  .checkcontainer {
+    cursor: pointer;
+  }
+
+  .checkcontainer input {
+    display: none;
+  }
+
+  .checkcontainer svg {
+    overflow: visible;
+  }
+
+  .path {
+    fill: none;
+    stroke: white;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+    stroke-dasharray: 241 9999999;
+    stroke-dashoffset: 0;
+  }
+
+  .checkcontainer input:checked~svg .path {
+    stroke-dasharray: 70.5096664428711 9999999;
+    stroke-dashoffset: -262.2723388671875;
+  }
+</style>
+<style>
+  .form-container input {
+    background-color: rgba(106, 90, 179, 0.5);
+    /* Semi-transparent white background */
+    backdrop-filter: blur(10px);
+    /* Blur effect */
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    border: 1px solid #414141;
+  }
+
+  .form-container input:read-only {
+    background-color: rgba(106, 90, 179, 0.5);
+    /* Semi-transparent white background */
+    backdrop-filter: blur(10px);
+    /* Blur effect */
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    border: 1px solid #414141;
+  }
+
+  .form-container select {
+    background-color: rgba(106, 90, 179, 0.5);
+    /* Semi-transparent white background */
+    backdrop-filter: blur(10px);
+    /* Blur effect */
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    border: 1px solid #414141;
+  }
+
+  .form-container textarea {
+    background-color: rgba(106, 90, 179, 0.5);
+    /* Semi-transparent white background */
+    backdrop-filter: blur(10px);
+    /* Blur effect */
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    border: 1px solid #414141;
+  }
+
+  .form-container input::placeholder {
+    opacity: 0.5;
+  }
+
+  .form-container input:focus {
+    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.5);
+    outline: none;
+    border-color: #e81cff;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .form-container textarea:focus {
+    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.5);
+    outline: none;
+    border-color: #e81cff;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .neon-border {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    box-sizing: border-box;
+    animation: neon-fill 2s ease infinite;
+  }
+
+  @keyframes neon-fill {
+    0% {
+      border-color: rgba(0, 255, 255, 0);
+      box-shadow: 0 0 10px 0 rgba(0, 255, 255, 0.5);
+    }
+
+    50% {
+      border-color: rgba(0, 255, 255, 0.7);
+      box-shadow: 0 0 10px 5px rgba(0, 255, 255, 0.7);
+    }
+
+    100% {
+      border-color: rgba(0, 255, 255, 0);
+      box-shadow: 0 0 10px 0 rgba(0, 255, 255, 0.5);
+    }
+  }
+
+  .submit-btn {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 12px;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #414141;
+    margin-top: 40px;
+    letter-spacing: 4px;
+  }
+
+  .form-container label {
+    letter-spacing: 4px;
+    font-size: 12px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: .5s;
+  }
+
+  .submit-btn:hover {
+    background: #03f40f;
+    color: #fff;
+    box-shadow: 0 0 5px #03f40f,
+      0 0 25px #03f40f,
+      0 0 50px #03f40f,
+      0 0 100px #03f40f;
+  }
+
+  .submit-btn span {
+    position: absolute;
+    display: block;
+  }
+
+  @keyframes btn-anim1 {
+    0% {
+      left: -100%;
+    }
+
+    50%,
+    100% {
+      left: 100%;
+    }
+  }
+
+  .submit-btn span:nth-child(1) {
+    bottom: 2px;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #03f40f);
+    animation: btn-anim1 2s linear infinite;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- DONATION FORM START -->
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-12 col-md-8 mx-auto">
+      <div class="card mt-4 form-container neon-border">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <!-- Card Header Start -->
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Food Donation Form</h6>
+          </div>
+        </div>
+        <!-- Card Header End -->
+        <div class="card-body">
+          <div class="row justify-content-center">
+            <form class="col-lg-12 ms-lg-12 ms-md-10 ms-sm-5" method="post" action="{{url_for('submit_donation')}}" enctype="multipart/form-data">
+              <!-- Form content goes here -->
+              <!-- User Information (Auto-filled) -->
+              <div class="row mb-3">
+                <!-- User information fields -->
+
+                <div class="row mb-3">
+                  <label for="lastName" class="col-sm-3 col-form-label font-weight-bold">First Name</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="firstName" value="{{ current_user.first_name }}">
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="lastName" class="col-sm-3 col-form-label font-weight-bold">Last Name</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="lastName" value="{{ current_user.last_name }}">
+                  </div>
+                </div>
+
+                <div class="mb-3 row">
+                  <label for="email" class="col-sm-3 col-form-label font-weight-bold">Email</label>
+                  <div class="col-sm-9">
+                    <input type="email" class="form-control form-container" id="email" value="{{ current_user.email }}"
+                      readonly>
+                  </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="mb-3 row">
+                  <label for="phonenumber" class="col-sm-3 col-form-label font-weight-bold">Contact Number</label>
+                  <div class="col-sm-9">
+                    <input type="number" class="form-control" id="phonenumber" maxlength="11"
+                      value='{{ current_user.phone_number }}'>
+                  </div>
+                </div>
+                <!-- Contact Information -->
+                <!-- User information fields -->
+
+
+                <!-- Donation Information -->
+
+                <!-- Food Type -->
+                <div class="mb-3 row">
+                  <label for="foodType" class="col-sm-3 col-form-label font-weight-bold">Food Type</label>
+                  <div class="col-sm-9">
+                    <select class="form-select" id="foodType" name="foodType">
+                      <option selected disabled>Select Food Type</option>
+                      <option value="Fruits">Fruits</option>
+                      <option value="Vegetables">Vegetables</option>
+                      <option value="Grains">Grains</option>
+                      <option value="Dairy">Dairy</option>
+                      <option value="Meat">Meat</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Food Type -->
+
+                <!-- Preferred Pickup/Delivery Time -->
+                <div class="mb-3 row">
+                  <label for="pickupTime" class="col-sm-3 col-form-label font-weight-bold">Preferred Pickup Time</label>
+                  <div class="col-sm-9">
+                    <div class="input-group date" id="pickupTime" data-target-input="nearest">
+                      <input type="datetime-local" id="pickupTime" name="pickupTime">
+                    </div>
+
+                  </div>
+                </div>
+                <!-- Preferred Pickup/Delivery Time -->
+
+                <!-- Food Weight -->
+                <div class="mb-3 row">
+                  <label for="weight" class="col-sm-3 col-form-label font-weight-bold">Weight (kg)</label>
+                  <div class="col-sm-9">
+                    <input type="range" class="form-control form-range" id="weight" name="weight" min="0" max='50'
+                      step="0.1">
+                    <label id="weightValue"></label>
+                  </div>
+                </div>
+                <!-- Food Weight -->
+
+                <!-- Expiry Date -->
+                <div class="mb-3 row">
+                  <label for="expiryDate" class="col-sm-3 col-form-label font-weight-bold">Expiry Date</label>
+                  <div class="col-sm-9">
+                    <input type="date" class="form-control" id="expiryDate" name="expiryDate">
+                  </div>
+                </div>
+                <!-- Expiry Date -->
+
+                <!-- Food Description -->
+                <div class="mb-3 row">
+                  <label for="description" class="col-sm-3 col-form-label font-weight-bold">Description</label>
+                  <div class="col-sm-9">
+                    <textarea class="form-control" id="description" name="description" rows="3"
+                      placeholder="Enter description"></textarea>
+                  </div>
+                </div>
+                <!-- Food Description -->
+
+
+                <!-- Food Image -->
+                <div class="mb-3 row">
+                  <label class="col-sm-3 col-form-label font-weight-bold">Image of the Food</label>
+                  <div class="col-sm-9">
+                    <div class="imagecontainer">
+                      <div class="imageheader">
+                        <img id="preview" class="img-fluid" src="">
+                        </img>
+                        <p>Browse File to upload!</p>
+                      </div>
+                      <label for="file" class="imagefooter">
+                        <svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                          <g id="SVGRepo_iconCarrier">
+                            <path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path>
+                            <path d="M18.153 6h-.009v5.342H23.5v-.002z"></path>
+                          </g>
+                        </svg>
+                        <p>No selected file</p>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              d="M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z"
+                              stroke="#000000" stroke-width="2"></path>
+                            <path d="M19.5 5H4.5" stroke="#000000" stroke-width="2" stroke-linecap="round"></path>
+                            <path d="M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z"
+                              stroke="#000000" stroke-width="2"></path>
+                          </g>
+                        </svg>
+                      </label>
+                      <input id="file" name='file' type="file">
+                    </div>
+                  </div>
+                </div>
+                <!-- Food Image -->
+
+
+                  <!-- Checkbox for terms and conditions -->
+                  <div class="mb-3 row mt-5">
+                    <label class="checkcontainer">
+                      <input name='terms' type="checkbox">
+                      <svg viewBox="0 0 64 64" height="2em" width="2em">
+                        <path
+                          d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                          pathLength="575.0541381835938" class="path"></path>
+                      </svg>
+                      I accept the terms and conditions of selling my soul
+                    </label>
+                  </div>
+                  <!-- Checkbox for terms and conditions -->
+
+                  <!-- modal if not agreed -->
+                  <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog ">
+                      <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                          <h5 class="modal-title text-primary" id="exampleModalLabel">Please accept terms and conditions
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          You need to accept terms in order to able to donate food!
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" data-bs-dismiss="modal"
+                            class="btn bg-gradient-primary mb-0">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- modal if not agreed -->
+
+
+
+                  <!-- Submit Button -->
+                  <div class="mb-3 row">
+                    <div class="col-sm-10 offset-sm-0">
+                      <button type="submit" class="bg-gradient-faded-info submit-btn">
+                        Submit Donation
+                        <span></span>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- Submit Button -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- DONATION FORM END         -->
+
+  {% include 'dashboard/includes/footer.html' %}
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('file');
+    const preview = document.getElementById('preview');
+    const fileInfo = document.querySelector('.imagefooter p');
+
+    fileInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          fileInfo.textContent = file.name;
+        }
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = '';
+        fileInfo.textContent = 'No selected file';
+      }
+    });
+  });
+</script>
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const termsCheckbox = document.querySelector('input[name="terms"]');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    submitBtn.addEventListener('click', function (event) {
+      if (!termsCheckbox.checked) {
+        event.preventDefault(); // Prevent form submission
+        $('#termsModal').modal('show'); // Show modal
+      }
+    });
+  });
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var weightInput = document.getElementById('weight');
+    var weightValue = document.getElementById('weightValue');
+
+    // Add event listener to the range input
+    weightInput.addEventListener('input', function () {
+      // Update the value displayed next to the range input
+      weightValue.textContent = this.value + 'kg(s)';
+
+    });
+  });
+</script>
+
+
+
+{% endblock javascripts %}

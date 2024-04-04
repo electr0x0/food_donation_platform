@@ -1,0 +1,212 @@
+{% extends "dashboard/layouts/base.html" %}
+
+{% block title %} Donate Food {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  .form-container input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    background-color: transparent;
+    border: 1px solid #414141;
+  }
+
+  .form-container select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    background-color: transparent;
+    border: 1px solid #414141;
+  }
+
+  .form-container textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    resize: none;
+    color: #fff;
+    height: 96px;
+    border: 1px solid #414141;
+    background-color: transparent;
+    font-family: inherit;
+  }
+
+  .form-container input::placeholder {
+    opacity: 0.5;
+  }
+
+  .form-container input:focus {
+    outline: none;
+    border-color: #e81cff;
+    color: #fff;
+  }
+
+  .form-container textarea:focus {
+    outline: none;
+    border-color: #e81cff;
+  }
+
+
+  .neon-border {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    box-sizing: border-box;
+    animation: neon-fill 2s linear infinite;
+  }
+
+  @keyframes neon-fill {
+    0% {
+      border-color: rgba(0, 255, 255, 0);
+      box-shadow: 0 0 10px 0 rgba(0, 255, 255, 0.5);
+    }
+
+    50% {
+      border-color: rgba(0, 255, 255, 0.7);
+      box-shadow: 0 0 10px 5px rgba(0, 255, 255, 0.7);
+    }
+
+    100% {
+      border-color: rgba(0, 255, 255, 0);
+      box-shadow: 0 0 10px 0 rgba(0, 255, 255, 0.5);
+    }
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- DONATION FORM START -->
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-12 col-md-8 mx-auto">
+      <div class="card mt-4 form-container neon-border">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <!-- Card Header Start -->
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Food Donation Form</h6>
+          </div>
+        </div>
+        <!-- Card Header End -->
+        <div class="card-body">
+          <div class="row justify-content-center">
+            <form class="col-lg-12 ms-lg-12 ms-md-10 ms-sm-5">
+              <!-- Form content goes here -->
+              <!-- User Information (Auto-filled) -->
+              <div class="row mb-3">
+                <!-- User information fields -->
+
+                <div class="row mb-3">
+                  <label for="lastName" class="col-sm-3 col-form-label font-weight-bold">First Name</label>
+                  <div class="col-sm-9 login-box">
+                    <span></span><span></span><span></span><span></span>
+                    <input type="text" class="form-control" id="firstName" value="{{ current_user.first_name }}">
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="lastName" class="col-sm-3 col-form-label font-weight-bold">Last Name</label>
+                  <div class="col-sm-9 login-box">
+                    <span></span><span></span><span></span><span></span>
+                    <input type="text" class="form-control" id="lastName" value="{{ current_user.last_name }}">
+                  </div>
+                </div>
+
+                <div class="mb-3 row">
+                  <label for="email" class="col-sm-3 col-form-label font-weight-bold">Email</label>
+                  <div class="col-sm-9 login-box">
+                    <span></span><span></span><span></span><span></span>
+                    <input type="email" class="form-control" id="email" value="{{ current_user.email }}">
+                  </div>
+                </div>
+                <!-- Donation Information -->
+
+                <!-- Food Type -->
+                <div class="mb-3 row">
+                  <label for="foodType" class="col-sm-3 col-form-label font-weight-bold">Food Type</label>
+                  <div class="col-sm-9 login-box">
+                    <span></span><span></span><span></span><span></span>
+                    <select class="form-select" id="foodType" name="foodType">
+                      <option selected disabled>Select Food Type</option>
+                      <option value="Fruits">Fruits</option>
+                      <option value="Vegetables">Vegetables</option>
+                      <option value="Grains">Grains</option>
+                      <option value="Dairy">Dairy</option>
+                      <option value="Meat">Meat</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Food Type -->
+
+
+                <!-- Food Weight -->
+                <div class="mb-3 row">
+                  <label for="weight" class="col-sm-3 col-form-label font-weight-bold">Weight (kg)</label>
+                  <div class="col-sm-9">
+                    <input type="range" class="form-control form-range" id="weight" name="weight"
+                      placeholder="Enter weight in kg" min="0" max='50' step="0.1">
+                  </div>
+                </div>
+                <!-- Food Weight -->
+
+                <!-- Expiry Date -->
+                <div class="mb-3 row">
+                  <label for="expiryDate" class="col-sm-3 col-form-label font-weight-bold">Expiry Date</label>
+                  <div class="col-sm-9 login-box">
+                    <span></span><span></span><span></span><span></span>
+                    <input type="date" class="form-control material-input" id="expiryDate" name="expiryDate">
+                  </div>
+                </div>
+                <!-- Expiry Date -->
+
+                <!-- Food Description -->
+                <div class="mb-3 row">
+                  <label for="description" class="col-sm-3 col-form-label font-weight-bold">Description</label>
+                  <div class="col-sm-9 login-box">
+                    <span></span><span></span><span></span><span></span>
+                    <textarea class="form-control material-input" id="description" name="description" rows="3"
+                      placeholder="Enter description"></textarea>
+                  </div>
+                </div>
+                <!-- Food Description -->
+
+
+                <!-- Submit Button -->
+                <div class="mb-3 row">
+                  <div class="col-sm-10 offset-sm-3">
+                    <button type="submit" class="p-2 bg-gradient-faded-info login-box"><span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>Submit Donation</button>
+                  </div>
+                </div>
+                <!-- Submit Button -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- DONATION FORM END         -->
+
+  {% include 'dashboard/includes/footer.html' %}
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

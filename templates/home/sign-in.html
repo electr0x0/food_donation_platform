@@ -1,0 +1,79 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Sign In {% endblock %}
+
+{% block body_class %} sign-in-basic {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% include 'includes/navigation.html' %}
+
+<div class="page-header align-items-start min-vh-100"
+  style="background-image: url('https://e0.pxfuel.com/wallpapers/909/210/desktop-wallpaper-charity-background-charity.jpg');"
+  loading="lazy">
+  <span class="mask bg-gradient-dark opacity-6"></span>
+  <div class="container my-auto">
+    <div class="row">
+      <div class="col-lg-4 col-md-8 col-12 mx-auto">
+        <div class="card z-index-0 fadeIn3 fadeInBottom">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-success shadow-primary border-radius-lg py-3 pe-1">
+              <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Sign in</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <form role="form" action='{{ url_for('sign_in') }}' class="text-start" method="post">
+              <div class="input-group input-group-outline my-3">
+                <label class="form-label">Email</label>
+                <input type="email" name='email' class="form-control" required>
+              </div>
+              <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name='password' class="form-control" required>
+              </div>
+              <div class="form-check form-switch d-flex align-items-center mb-3">
+                <input class="form-check-input" type="checkbox" id="rememberMe">
+                <label class="form-check-label mb-0 ms-2" for="rememberMe">Remember me</label>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn bg-gradient-success w-100 my-4 mb-2">Sign in</button>
+              </div>
+              <p class="mt-4 text-sm text-center">
+                Don't have an account?
+                <a href="/sign-up/donator" class="text-primary text-gradient font-weight-bold">Donator</a> or <a href="/sign-up/volunteer" class="text-primary text-gradient font-weight-bold">Volunteer</a> 
+              </p>
+            </form>
+
+            {% if successmsg %}
+            <div class="alert alert-success text-white font-weight-bold" role="alert">
+                {{ successmsg }}
+            </div>
+            {% endif %}
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-primary text-white font-weight-bold" role="alert">
+              {% for message in messages %}
+                {{ message }}
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'includes/footer-auth.html' %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

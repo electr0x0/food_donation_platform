@@ -1,0 +1,332 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} About Us {% endblock %}
+
+{% block body_class %} about-us {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<!-- Add your custom stylesheets here -->
+{% endblock stylesheets %}
+
+{% block content %}
+  {% include 'includes/navigation.html' %}
+
+  <header class="bg-gradient-faded-info">
+    <div class="page-header min-vh-75" style="background-image: url('/static/assets/img/bg-food-donation.jpg');">
+      <span class="mask bg-gradient-dark opacity-6"></span>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center mx-auto my-auto">
+            <h1 class="text-white">Help Us Make a Difference</h1>
+            <p class="lead mb-4 text-white opacity-8">Join us in our mission to empower communities through food donation.</p>
+            <h6 class="text-white mb-2 mt-5">Find us on</h6>
+            <div class="d-flex justify-content-center">
+              <a href="javascript:;"><i class="fab fa-facebook text-lg text-white me-4"></i></a>
+              <a href="javascript:;"><i class="fab fa-instagram text-lg text-white me-4"></i></a>
+              <a href="javascript:;"><i class="fab fa-twitter text-lg text-white me-4"></i></a>
+              <a href="javascript:;"><i class="fab fa-google-plus text-lg text-white"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+    <!-- Section with four info areas left & one card right with image and waves -->
+    <section class="py-7">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="row justify-content-start">
+              <div class="col-md-6">
+                <div class="info">
+                  <i class="material-icons text-3xl text-gradient text-info mb-3">local_dining</i>
+                  <h5>Donate Food</h5>
+                  <p>Support those in need by donating surplus food from your home or organization.</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info">
+                  <i class="material-icons text-3xl text-gradient text-info mb-3">volunteer_activism</i>
+                  <h5>Become a Volunteer</h5>
+                  <p>Join our dedicated team of volunteers and make a difference in your community.</p>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-start mt-4">
+              <div class="col-md-6">
+                <div class="info">
+                  <i class="material-icons text-3xl text-gradient text-info mb-3">monetization_on</i>
+                  <h5>Financial Support</h5>
+                  <p>Contribute financially to help us in our mission to provide food to those in need.</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info">
+                  <i class="material-icons text-3xl text-gradient text-info mb-3">people</i>
+                  <h5>Spread Awareness</h5>
+                  <p>Help us spread awareness about food insecurity and our efforts to combat it.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+            <div class="card">
+              <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <a class="d-block blur-shadow-image">
+                  <img src="https://images.unsplash.com/photo-1544717302-de2939b7ef71?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="img-colored-shadow" class="img-fluid border-radius-lg">
+                </a>
+              </div>
+              <div class="card-body text-center">
+                <h5 class="font-weight-normal">
+                  <a href="javascript:;">Get Involved Today</a>
+                </h5>
+                <p class="mb-0">
+                  Make a positive impact in your community by joining our food donation initiative.
+                </p>
+                <button type="button" class="btn bg-gradient-info btn-sm mb-0 mt-3">Find out more</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END Section with four info areas left & one card right with image and waves -->
+    
+    <!-- -------- START Features w/ pattern background & stats & rocket -------- -->
+    <section class="pb-5 position-relative bg-gradient-faded-info mx-n3">
+      <div class="container">
+        <div class="row">
+            <div class="col-md-8 text-start mb-5 mt-5">
+              <h3 class="text-white z-index-1 position-relative">Our Commitment</h3>
+              <p class="text-white opacity-8 mb-0">We are dedicated to ensuring that no one goes hungry in our community. Here's how we're making a difference:</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-12">
+              <div class="card card-profile mt-4">
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-12 mt-n5">
+                    <a href="javascript:;">
+                      <div class="p-3 pe-md-0">
+                        <img class="w-100 border-radius-md shadow-lg" src="https://www.alzalaska.org/wp-content/uploads/2022/02/volunteer.png" alt="image">
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-lg-8 col-md-6 col-12 my-auto">
+                    <div class="card-body ps-lg-0">
+                      <h5 class="mb-0">Join Our Volunteers</h5>
+                      <h6 class="text-info">Volunteer Program</h6>
+                      <p class="mb-0">Volunteers are the heart of our organization. Join us in distributing food to those in need.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="card card-profile mt-lg-4 mt-5">
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-12 mt-n5">
+                    <a href="javascript:;">
+                      <div class="p-3 pe-md-0">
+                        <img class="w-100 border-radius-md shadow-lg" src="https://www.shutterstock.com/image-photo/donation-box-food-600nw-713686756.jpg" alt="image">
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-lg-8 col-md-6 col-12 my-auto">
+                    <div class="card-body ps-lg-0">
+                      <h5 class="mb-0">Donate Food</h5>
+                      <h6 class="text-info">Food Donation</h6>
+                      <p class="mb-0">Help feed families in need by donating surplus food from your home or organization.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-lg-6 col-12">
+              <div class="card card-profile mt-4 z-index-2">
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-12 mt-n5">
+                    <a href="javascript:;">
+                      <div class="p-3 pe-md-0">
+                        <img class="w-100 border-radius-md shadow-lg" src="https://images.unsplash.com/photo-1574482620826-40685ca5ebd2?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="image">
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-lg-8 col-md-6 col-12 my-auto">
+                    <div class="card-body ps-lg-0">
+                      <h5 class="mb-0">Spread Awareness</h5>
+                      <h6 class="text-info">Community Engagement</h6>
+                      <p class="mb-0">Educate others about food insecurity and the importance of supporting those in need.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="card card-profile mt-lg-4 mt-5 z-index-2">
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-12 mt-n5">
+                    <a href="javascript:;">
+                      <div class="p-3 pe-md-0">
+                        <img class="w-100 border-radius-md shadow-lg" src="https://images.unsplash.com/photo-1604881991720-f91add269bed?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="image">
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-lg-8 col-md-6 col-12 my-auto">
+                    <div class="card-body ps-lg-0">
+                      <h5 class="mb-0">Financial Support</h5>
+                      <h6 class="text-info">Donate Now</h6>
+                      <p class="mb-0">Provide financial assistance to help us continue our efforts in combating hunger.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- -------- END Features w/ pattern background & stats & rocket -------- -->
+      <section class="pt-4 pb-6" id="count-stats">
+        <div classclass="container">
+            <div class="row mb-7">
+              <div class="col-lg-2 col-md-4 col-6 mb-4">
+                <img class="w-100 opacity-7" src="/static/assets/img/logos/gray-logos/logo-apple.svg" alt="logo">
+              </div>
+              <div class="col-lg-2 col-md-4 col-6 mb-4">
+                <img class="w-100 opacity-7" src="/static/assets/img/logos/gray-logos/logo-coinbase.svg" alt="logo">
+              </div>
+              <div class="col-lg-2 col-md-4 col-6 mb-4">
+                <img class="w-100 opacity-7" src="/static/assets/img/logos/gray-logos/logo-digitalocean.svg" alt="logo">
+              </div>
+              <div class="col-lg-2 col-md-4 col-6 mb-4">
+                <img class="w-100 opacity-7" src="/static/assets/img/logos/gray-logos/logo-facebook.svg" alt="logo">
+              </div>
+              <div class="col-lg-2 col-md-4 col-6 mb-4">
+                <img class="w-100 opacity-7" src="/static/assets/img/logos/gray-logos/logo-netflix.svg" alt="logo">
+              </div>
+              <div class="col-lg-2 col-md-4 col-6 mb-4">
+                <img class="w-100 opacity-7" src="/static/assets/img/logos/gray-logos/logo-spotify.svg" alt="logo">
+              </div>
+            </div>
+            <div class="row justify-content-center text-center">
+              <div class="col-md-3">
+                <h1 class="text-gradient text-info" id="state1" countTo="5234">0</h1>
+                <h5>People Fed</h5>
+                <p>Through our food donation programs and initiatives</p>
+              </div>
+              <div class="col-md-3">
+                <h1 class="text-gradient text-info"><span id="state2" countTo="3400">0</span>+</h1>
+                <h5>Volunteer Hours</h5>
+                <p>Contributed by our dedicated team of volunteers</p>
+              </div>
+              <div class="col-md-3">
+                <h1 class="text-gradient text-info"><span id="state3" countTo="24">0</span>/7</h1>
+                <h5>Days a Week</h5>
+                <p>We provide support and assistance to those in need</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- -------- START Content Presentation Docs ------- -->
+    <div class="container mt-sm-5">
+        <div class="page-header py-6 py-md-5 my-sm-3 mb-3 border-radius-xl" style="background-image: url('https://img.freepik.com/premium-vector/young-volunteer-with-food-donation-boxes-concept-illustrations-food-donation-concept-with-character-can-use-web-banner-infographics-hero-images_106796-258.jpg');" loading="lazy">
+          <span class="mask bg-gradient-faded-info"></span>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6 ms-lg-5">
+                <h4 class="text-white">Join Our Mission</h4>
+                <h1 class="text-white">Making a Difference</h1>
+                <p class="lead text-white opacity-8">Explore how you can be a part of our journey to eradicate hunger and food insecurity. Discover the various ways you can contribute and support our cause.</p>
+                <a href="#" class="text-white icon-move-right">
+                  Learn More
+                  <i class="fas fa-arrow-right text-sm ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="info-horizontal bg-gradient-faded-info border-radius-xl d-block d-md-flex p-4">
+              <i class="material-icons text-white text-3xl">donate</i>
+              <div class="ps-0 ps-md-3 mt-3 mt-md-0">
+                <h5 class="text-white">How to Donate</h5>
+                <p class="text-white">Discover the different ways you can donate food items or funds to support our food donation programs.</p>
+                <a href="#" class="text-white icon-move-right">
+                  Get Involved
+                  <i class="fas fa-arrow-right text-sm ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 px-lg-1 mt-lg-0 mt-4">
+            <div class="info-horizontal bg-gray-100 border-radius-xl d-block d-md-flex p-4 h-100">
+              <i class="material-icons text-gradient text-info text-3xl">volunteer_activism</i>
+              <div class="ps-0 ps-md-3 mt-3 mt-md-0">
+                <h5>Volunteer Opportunities</h5>
+                <p>Explore how you can volunteer your time and skills to help distribute food to those in need.</p>
+                <a href="#" class="text-info icon-move-right">
+                  Get Involved
+                  <i class="fas fa-arrow-right text-sm ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 mt-lg-0 mt-4">
+            <div class="info-horizontal bg-gray-100 border-radius-xl d-block d-md-flex p-4">
+              <i class="material-icons text-gradient text-info text-3xl">info</i>
+              <div class="ps-0 ps-md-3 mt-3 mt-md-0">
+                <h5>Learn More About Us</h5>
+                <p>Discover our mission, vision, and the impact we're making in the community through our food donation initiatives.</p>
+                <a href="#" class="text-info icon-move-right">
+                  About Us
+                  <i class="fas fa-arrow-right text-sm ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- -------- END Content Presentation Docs ------- -->
+  
+      </div>
+    {% endblock content %}
+    
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}
+    <script type="text/javascript">
+        if (document.getElementById('state1')) {
+          const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
+          if (!countUp.error) {
+            countUp.start();
+          } else {
+            console.error(countUp.error);
+          }
+        }
+        if (document.getElementById('state2')) {
+          const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
+          if (!countUp1.error) {
+            countUp1.start();
+          } else {
+            console.error(countUp1.error);
+          }
+        }
+        if (document.getElementById('state3')) {
+          const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
+          if (!countUp2.error) {
+            countUp2.start();
+          } else {
+            console.error(countUp2.error);
+          };
+        }
+      </script>
+    {% endblock javascripts %}
+    
+  

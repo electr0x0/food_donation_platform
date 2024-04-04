@@ -1,0 +1,63 @@
+{% extends "dashboard/layouts/base.html" %}
+
+{% block title %} Pickup Food {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-12 col-md-8 mx-auto">
+      <div class="card mt-4 form-container neon-border">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <!-- Card Header Start -->
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Pending Food Donations</h6>
+          </div>
+        </div>
+        <!-- Card Header End -->
+        <div class="card-body">
+          <div class="row justify-content-center">
+            {% for food in deliveries %}
+            <div class="col-lg-12 mb-4">
+              <div class="card">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src="{{ food.image_path }}" class="img-fluid rounded-start" alt="Food Image">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ food.food_type }}</h5>
+                      <p class="card-text">Pickup Time: {{ food.pickup_time }}</p>
+                      <p class="card-text">Weight: {{ food.weight_kg }} kg</p>
+                      <p class="card-text">Expiry Date: {{ food.expiry_date }}</p>
+                      <p class="card-text">Description: {{ food.description }}</p>
+                      <!-- Donator details -->
+                      <p class="card-text">Donator: {{ food.user.first_name }} {{ food.user.last_name }}</p>
+                      <p class="card-text">Donator Phone Number: {{ food.user.phone_number }}</p>
+                      <p class="card-text">Donator Address: {{ food.user.address }}</p>
+                      <form method="post" action="{{ url_for('pending_deliveries') }}">
+                        <input type="hidden" name="status" value="pending">
+                        <input type="hidden" name="id" value="{{ food.id }}">
+                        <button type="submit" class="btn btn-primary">Cancel Pickup</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,357 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Template Page {% endblock %} 
+
+{% block body_class %} index-page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+
+  {% include 'includes/navigation.html' %}
+  <!-- -------- START HERO CONTENT  ------- -->
+<header>
+  <div class="page-header min-vh-100" style="background-image: url(&#39;https://images.unsplash.com/photo-1593113616828-6f22bca04804?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&#39;);" loading="lazy">
+    <span class="mask bg-gradient-dark opacity-5"></span>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
+          <h1 class="text-white mb-4 animate__animated animate__slow" id="headerTitle"> Empowering Communities, One Meal at a Time </h1>
+          <p class="text-white opacity-8 lead pe-5 me-5 typing"></p>
+          <div class="buttons">
+            <button type="button" class="btn btn-white m-4 bg-gradient-success">Join Now</button>
+            <button type="button" class="btn btn-white m-2">Read More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- -------- END HERO CONTENT ------- -->
+
+  <!-- START MAIN BODY -->
+
+  <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+    <div class="container">
+    <!-- Section with four info areas left & one card right with image and waves -->
+<section class="py-7">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <div class="row justify-content-start">
+          <div class="col-md-6">
+            <div class="info">
+              <i class="material-icons text-3xl text-gradient text-success mb-3">group</i>
+              <h5>Community Support</h5>
+              <p>Join a supportive community dedicated to fighting hunger and food waste.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info">
+              <i class="material-icons text-3xl text-gradient text-success mb-3">food_bank</i>
+              <h5>Donation Options</h5>
+              <p>Explore various food donation options to make a meaningful impact.</p>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-start mt-4">
+          <div class="col-md-6">
+            <div class="info">
+              <i class="material-icons text-3xl text-gradient text-success mb-3">storefront</i>
+              <h5>Local Partnerships</h5>
+              <p>Collaborate with local businesses and organizations to expand our reach.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info">
+              <i class="material-icons text-3xl text-gradient text-success mb-3">supervised_user_circle</i>
+              <h5>Volunteer Opportunities</h5>
+              <p>Volunteer your time and skills to support our food donation initiatives.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+        <div class="card">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <a class="d-block blur-shadow-image">
+              <img src="https://plus.unsplash.com/premium_photo-1663099709993-186db4dee974?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="img-colored-shadow" class="img-fluid border-radius-lg">
+            </a>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="font-weight-normal">
+              <a href="javascript:;">Learn About Our Initiatives</a>
+            </h5>
+            <p class="mb-0">
+              Discover how we're making a difference in the fight against hunger and food waste.
+            </p>
+            <button type="button" class="btn bg-gradient-success btn-sm mb-0 mt-3">Find out more</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- END Section with four info areas left & one card right with image and waves -->
+
+
+    <hr class="divider animate__animated animate__slow" id="divider-line">
+
+    <!-- STATS SECTION START -->
+    <section class="pt-3 pb-4" id="count-stats">
+      <div class="container animate__animated animate__slow" id="count-section">
+        <div class="row">
+          <div class="col-lg-9 mx-auto py-3">
+            <div class="row">
+              <div class="col-md-4 position-relative">
+                <div class="p-3 text-center">
+                  <h1 class="text-gradient text-success"><span id="state1" countTo="70">0</span>+</h1>
+                  <h5 class="mt-3">Meals Shared</h5>
+                  <p class="text-sm font-weight-normal">Together, we make a difference, one meal at a time.</p>
+                </div>
+                <hr class="vertical dark">
+              </div>
+              <div class="col-md-4 position-relative">
+                <div class="p-3 text-center">
+                  <h1 class="text-gradient text-success"> <span id="state2" countTo="15">0</span>+</h1>
+                  <h5 class="mt-3">Supporters</h5>
+                  <p class="text-sm font-weight-normal">Join our community and be part of something meaningful.</p>
+                </div>
+                <hr class="vertical dark">
+              </div>
+              <div class="col-md-4">
+                <div class="p-3 text-center">
+                  <h1 class="text-gradient text-success" id="state3" countTo="4">0</h1>
+                  <h5 class="mt-3">Goals</h5>
+                  <p class="text-sm font-weight-normal">Together, we strive to achieve our shared vision and objectives.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- STATS SECTION END -->
+    
+
+    <hr class="divider animate__animated animate__slow" id="divider-line">
+      <!-- Testimonials and partner logos START -->
+      <section class="py-7">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6 mx-auto text-center">
+              <h2 class="mb-0">Trusted by over</h2>
+              <h2 class="text-gradient text-success mb-3">100+ generous donors</h2>
+              <p class="lead">Many local food banks, community organizations, schools, and government agencies rely on our food donation platform. </p>
+            </div>
+          </div>
+          <div class="row mt-6 animate__animated animate__slow" id="testi-section">
+            <div class="col-lg-4 col-md-8">
+              <div class="card card-plain">
+                <div class="card-body">
+                  <div class="author">
+                    <div class="name">
+                      <h6 class="mb-0 font-weight-bolder">Mr. A</h6>
+                      <div class="stats">
+                        <i class="far fa-clock"></i> 1 day ago
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-4">"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex dignissimos accusantium eum consectetur aliquid ullam."</p>
+                  <div class="rating mt-3">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-8 ms-md-auto">
+              <div class="card bg-gradient-success">
+                <div class="card-body">
+                  <div class="author align-items-center">
+                    <div class="name">
+                      <h6 class="text-white mb-0 font-weight-bolder">Mr. Y</h6>
+                      <div class="stats text-white">
+                        <i class="far fa-clock"></i> 1 week ago
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-4 text-white">""Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex dignissimos accusantium eum consectetur aliquid ullam.""</p>
+                  <div class="rating mt-3">
+                    <i class="fas fa-star text-white"></i>
+                    <i class="fas fa-star text-white"></i>
+                    <i class="fas fa-star text-white"></i>
+                    <i class="fas fa-star text-white"></i>
+                    <i class="fas fa-star text-white"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-8">
+              <div class="card card-plain">
+                <div class="card-body">
+                  <div class="author">
+                    <div class="name">
+                      <h6 class="mb-0 font-weight-bolder">Mr. X</h6>
+                      <div class="stats">
+                        <i class="far fa-clock"></i> 3 weeks ago
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-4">""Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex dignissimos accusantium eum consectetur aliquid ullam.""</p>
+                  <div class="rating mt-3">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="horizontal dark my-5">
+          <div class="row d-flex justify-content-center">
+            <div class="col-lg-2">
+              <img class="w-100 h-50 opacity-6" src="/static/assets/img/companies/brac.svg" alt="Logo">
+            </div>
+            <div class="col-lg-2">
+              <img class="w-100 h-50 opacity-6" src="/static/assets/img/companies/foodpanda-logo.svg" alt="Logo">
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Testimonials and partner logos END -->
+      <hr class="divider animate__animated animate__slow" id="divider-line">
+      <!-- -------- START PRE-FOOTER 1 w/ SUBSCRIBE BUTTON AND IMAGE ------- -->
+    <section class="my-5 pt-5">
+      <div class="container animate__animated animate__slow" id="newsletter">
+        <div class="row">
+          <div class="col-md-6 m-auto">
+            <h4>Be the first to make a difference</h4>
+            <p class="mb-4">
+              Subscribe to our newsletter for the latest updates on food donation initiatives and more!
+            </p>
+            <div class="row">
+              <div class="col-8">
+                <div class="input-group input-group-outline">
+                  <label class="form-label">Email Here...</label>
+                  <input type="text" class="form-control mb-sm-0">
+                </div>
+              </div>
+              <div class="col-4 ps-0">
+                <button type="button" class="btn bg-gradient-success mb-0 h-100 position-relative z-index-2">Subscribe</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5 ms-auto">
+            <div class="position-relative">
+              <img class="max-width-50 w-80 position-relative z-index-2 rounded-500" src="https://images.unsplash.com/photo-1603539279542-e7cf76a92801?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="image">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- -------- END PRE-FOOTER 1 w/ SUBSCRIBE BUTTON AND IMAGE ------- -->
+    </div>
+  </div>
+
+  <!-- END MAIN BODY -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    var typed = new Typed('.typing', {
+      strings: ['Join us in the fight against hunger and food waste'],
+      typeSpeed: 100,
+      loop: false,
+      onComplete: function() {
+        document.querySelector('.typing').style.display = 'inline-block';
+        document.querySelector('.typing-subtitle').style.display = 'block';
+      }
+    });
+  });
+</script>
+<script type="text/javascript">
+function startCountingIfVisible(elementId) {
+    const element = document.getElementById(elementId);
+    if (element && isInViewport(element)) {
+        const countUp = new CountUp(elementId, element.getAttribute("countTo"));
+        if (!countUp.error) {
+            countUp.start();
+        } else {
+            console.error(countUp.error);
+        }
+    }
+}
+// Function to check if an element is in the viewport
+function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+</script>
+
+<script>
+  count = false;
+  // Function to start animations when the content is in the viewport
+  function animateOnScroll(entries, observer) {
+      entries.forEach(entry => {
+          if (entry.isIntersecting) {
+              entry.target.classList.add('animate__fadeInLeftBig');
+              entry.target.classList.add('animate__slow');
+              entry.target.addEventListener('animationend', () => {
+                if (count) {
+                    startCounting();
+                }
+            }, { once: true });
+              observer.unobserve(entry.target);
+          }
+      });
+  }
+  // Create an Intersection Observer
+  const observer = new IntersectionObserver(animateOnScroll, { threshold: 0.5 });
+
+  // Observe the headerTitle element
+  const headerTitle = document.getElementById('headerTitle');
+  observer.observe(headerTitle);
+
+  const countSection = document.getElementById('count-section');
+  observer.observe(countSection)
+
+  const testiSection = document.getElementById('testi-section');
+  observer.observe(testiSection)
+
+  const newsletter = document.getElementById('newsletter');
+  observer.observe(newsletter)
+
+  function scrollHandler() {
+    startCountingIfVisible('state1');
+    startCountingIfVisible('state2');
+    startCountingIfVisible('state3');
+}
+
+  // Event listener for scroll
+  document.addEventListener("scroll", scrollHandler);
+
+  // Function to start counting
+  function startCounting() {
+      startCountingIfVisible('state1');
+      startCountingIfVisible('state2');
+      startCountingIfVisible('state3');
+  }
+
+</script>
+{% endblock javascripts %}
