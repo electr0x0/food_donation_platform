@@ -15,17 +15,17 @@ This project is a web application built using Flask, a lightweight web framework
 
 1. Clone the repository:
 
-- git clone <https://github.com/electr0x0/food_donation_platform>
+- `git clone <https://github.com/electr0x0/food_donation_platform>`
 
 2. Install the required dependencies:
 
-- pip install -r requirements.txt
+- `pip install -r requirements.txt`
 
 3. Create a database in your MySQL named "food_donation".
 
 4. Run the application:
 
-- python app.py
+- `python app.py`
 
 5. Access the application in your web browser at http://localhost:5000.
 
