@@ -1,8 +1,8 @@
-Introduction:
+# Introduction:
 
 This project is a web application built using Flask, a lightweight web framework in Python. It serves as a platform for managing food donations, allowing users to register, create donation requests, and volunteer to pick up and distribute food donations.
 
-Features:
+# Features:
 
 - User authentication and authorization
 - User registration and profile management
@@ -11,7 +11,7 @@ Features:
 - Admin dashboard for managing users and donations
 
 
-How to Run:
+# How to Run:
 
 1. Clone the repository:
 
@@ -33,7 +33,7 @@ python app.py
 
 Note: Make sure to configure the database connection string and other environment variables as necessary.
 
-Contributing:
+# Contributing:
 
 1. Fork the repository.
 2. Create a new branch (git checkout -b feature/xyz).
@@ -41,6 +41,6 @@ Contributing:
 4. Push to the branch (git push origin feature/xyz).
 5. Create a new Pull Request.
 
-License:
+# License:
 
 This project is licensed under the MIT License.
