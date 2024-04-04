@@ -4,7 +4,12 @@
       <a class="navbar-brand m-0" 
          href="https://appseed.us/product/material-dashboard/flask/" target="_blank">
         <img src="/static/assets/img/logos/dashboard-logo.png" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold text-white">Donator Dashboard</span>
+        {% if current_user.user_group_id == 1 %}
+        <span class="ms-1 font-weight-bold text-white">Donor Dashboard</span>
+        {% endif %}
+        {% if current_user.user_group_id == 2 %}
+        <span class="ms-1 font-weight-bold text-white">Volunteer Dashboard</span>
+        {% endif %}
       </a>
     </div>
     <hr class="horizontal light mt-0 mb-2">
@@ -20,7 +25,7 @@
           </a>
         </li>
         
-
+        {% if current_user.user_group_id == 1 %}
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Donate Food</h6>
         </li>
@@ -44,7 +49,9 @@
             <span class="nav-link-text ms-1">Track Donated Food</span>
           </a>
         </li>
+        {% endif %}
 
+        {% if current_user.user_group_id == 2 %}
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Pickup Food</h6>
         </li>
@@ -68,8 +75,11 @@
             <span class="nav-link-text ms-1">Pending deliveries</span>
           </a>
         </li>
+        {% endif %}
 
 
+
+        {% if current_user.address == '123 Donation Street' or '123 Volunteer Street' %}
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Others</h6>
         </li>
@@ -114,6 +124,8 @@
             <span class="nav-link-text ms-1">Profile</span>
           </a>
         </li>
+        {% endif %}
+
         <li class="nav-item">
           <a class="nav-link text-white " href="{{ url_for('logout') }}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">

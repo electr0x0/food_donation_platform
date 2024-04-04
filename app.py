@@ -26,13 +26,30 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    return render_template('home/index.html')
+    return render_template('home/index.html', )
 
 #Dashboard Routes Start
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard/home/index.html', segment= 'index')
+    food_donations = DonationFood.query.filter_by(user_id=current_user.id).all()
+    total_weight = sum(donation_request.weight_kg for donation_request in food_donations)
+    indi_weight = [0,0,0,0,0]
+    
+    for food in food_donations:
+        match food.food_type:
+            case "Fruits":
+                indi_weight[0] += food.weight_kg
+            case "Vegetables":
+                indi_weight[1] += food.weight_kg
+            case "Grains":
+                indi_weight[2] += food.weight_kg
+            case "Dairy":
+                indi_weight[3] += food.weight_kg
+            case "Meat":
+                indi_weight[4] += food.weight_kg
+                
+    return render_template('dashboard/home/index.html', segment= 'index', total_donation_req_count = len(food_donations), total_weight_of_food =total_weight, indi_donation_weight = indi_weight )
 
 @app.route('/tables')
 @login_required
@@ -47,7 +64,8 @@ def notifications():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('dashboard/home/profile.html', segment= 'profile')
+    food_donation = DonationFood.query.filter_by(user_id=current_user.id).all()
+    return render_template('dashboard/home/profile.html', segment= 'profile', donations = food_donation)
 
 @app.route('/donate-food')
 @login_required
