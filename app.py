@@ -4,10 +4,13 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_login import LoginManager, login_user, UserMixin, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from models import app, db, User, UserGroup, DonationFood
+from models import app, db, User, UserGroup, DonationFood, WebsiteTraffic
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
 
+load_dotenv()
 
-app.secret_key = 'ultrasecret'
+app.secret_key = os.getenv('SECRET_KEY')
 
 # Configure Flask-Login
 login_manager = LoginManager()
@@ -289,6 +292,123 @@ def pending_deliveries():
 # Volunteer Routes End
 
 
+#Admin Routes Start
+def admin_required(func):
+    def wrapper(*args, **kwargs):
+        if current_user.is_authenticated and current_user.user_group_id == 3:
+            return func(*args, **kwargs)
+        else:
+            return 'Unauthorized', 401
+    # Set a unique endpoint name based on the original function name
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+@app.route('/manage-users')
+@login_required
+@admin_required
+def manage_users():
+    # Query users with group ID 1 (donors)
+    donors = User.query.filter_by(user_group_id=1).all()
+    
+    # Query users with group ID 2 (volunteers)
+    volunteers = User.query.filter_by(user_group_id=2).all()
+    
+    return render_template('dashboard/home/manage-users.html', donors = donors, volunteers = volunteers)
+
+@app.route('/get_user/<int:user_id>')
+@login_required
+@admin_required
+def get_user(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    return jsonify({
+        'id': user.id,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+        'address': user.address,
+        'phone_number': user.phone_number,
+        'created_at': user.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    })
+    
+# Route to delete a volunteer
+@app.route('/delete_user/<int:user_id>', methods=['DELETE'])
+@login_required
+@admin_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        return 'User deleted successfully', 200
+    except Exception as e:
+        db.session.rollback()
+        return str(e), 500
+
+# Route to handle updating volunteer information
+@app.route('/update_user/<int:user_id>', methods=['POST'])
+@login_required
+@admin_required
+def update_user(user_id):
+    # Get data from the request form
+    data = request.json
+    user = User.query.get_or_404(user_id)
+    try:
+        # Update volunteer information
+        user.first_name = data.get('first_name')
+        user.last_name = data.get('last_name')
+        user.email = data.get('email')
+        user.address = data.get('address')
+        user.phone_number = data.get('phone_number')
+        # Save changes to the database
+        db.session.commit()
+        return 'User information updated successfully', 200
+    except Exception as e:
+        db.session.rollback()
+        return str(e)
+    
+@app.route('/traffic-data')
+@login_required
+@admin_required
+def get_traffic_data():
+    end_date = datetime.now().date()
+    start_date = end_date - timedelta(days=6)
+    traffic_data = WebsiteTraffic.query.filter(WebsiteTraffic.date.between(start_date, end_date)).all()
+
+    
+    traffic_data_dict = {
+        "labels": [data.date.strftime('%a') for data in traffic_data],
+        "data": [data.views for data in traffic_data]
+    }
+
+    return jsonify(traffic_data_dict)
+
+@app.before_request
+def update_traffic():
+    STATIC_PATHS = ['/static/', '/assets/']
+    is_static_asset = any(request.path.startswith(path) for path in STATIC_PATHS)
+
+    # If it's a static asset, return without updating traffic
+    if is_static_asset:
+        return
+
+    # Get the current date
+    current_date = datetime.now().date()
+
+    # Check if there's a record for the current date
+    traffic_data = WebsiteTraffic.query.filter_by(date=current_date).first()
+
+    if traffic_data:
+        # If a record exists, increment the view count
+        traffic_data.views += 1
+    else:
+        # If no record exists, create a new one with a view count of 1
+        new_traffic_data = WebsiteTraffic(date=current_date, views=1)
+        db.session.add(new_traffic_data)
+
+    # Commit the changes to the database
+    db.session.commit()
+
 @app.route('/update-groups')
 def create_user_groups():
     existing_groups = UserGroup.query.all()
@@ -303,6 +423,12 @@ def create_user_groups():
     volunteer_group = UserGroup(name='volunteer', description='User group for volunteer users (delivery agents)')
     db.session.add(volunteer_group)
     
+    admin_group = UserGroup(name='admin', description='User group for admin')
+    db.session.add(admin_group)
+    
+    admin_user = User(username=os.getenv('ADMIN_USERNAME'), first_name='Admin', email='admin@fooddonation.org', last_name='Admin', address='None', organization='Food Donation', password_hash=generate_password_hash(os.getenv('ADMIN_PASSWORD')), user_group_id=3, phone_number=os.getenv('ADMIN_PHONE'))
+    
+    db.session.add(admin_user)
     try:
         db.session.commit()
         return "User groups created successfully."

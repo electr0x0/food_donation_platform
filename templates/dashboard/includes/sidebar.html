@@ -10,6 +10,9 @@
         {% if current_user.user_group_id == 2 %}
         <span class="ms-1 font-weight-bold text-white">Volunteer Dashboard</span>
         {% endif %}
+        {% if current_user.user_group_id == 3 %}
+        <span class="ms-1 font-weight-bold text-white">Admin Dashboard</span>
+        {% endif %}
       </a>
     </div>
     <hr class="horizontal light mt-0 mb-2">
@@ -24,6 +27,22 @@
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
+
+        {% if current_user.user_group_id == 3 %}
+        <li class="nav-item mt-3">
+          <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Manage Users</h6>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link text-white {% if 'donate-food' in segment %} active bg-gradient-primary {% endif %}" 
+             href="/manage-users">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">manage_accounts</i>
+            </div>
+            <span class="nav-link-text ms-1">Manage Users</span>
+          </a>
+        </li>
+        {% endif %}
         
         {% if current_user.user_group_id == 1 %}
         <li class="nav-item mt-3">

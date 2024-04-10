@@ -1,0 +1,349 @@
+{% extends "dashboard/layouts/base.html" %}
+
+{% block title %} Manage Users {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  .form-container {
+    border-radius: 0.75rem;
+    background-color: rgba(17, 24, 39, 1);
+    padding: 2rem;
+    color: rgba(243, 244, 246, 1);
+  }
+
+  .title {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+  }
+
+  .form {
+    margin-top: 1.5rem;
+  }
+
+  .input-group {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .input-group label {
+    display: block;
+    color: rgba(156, 163, 175, 1);
+    margin-bottom: 4px;
+  }
+
+  .input-group input {
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(55, 65, 81, 1);
+    outline: 0;
+    background-color: rgba(17, 24, 39, 1);
+    padding: 0.75rem 1rem;
+    color: rgba(243, 244, 246, 1);
+  }
+
+  .input-group input:focus {
+    border-color: rgba(167, 139, 250);
+  }
+
+  .forgot {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgba(156, 163, 175, 1);
+    margin: 8px 0 14px 0;
+  }
+
+  .forgot a,
+  .signup a {
+    color: rgba(243, 244, 246, 1);
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .forgot a:hover,
+  .signup a:hover {
+    text-decoration: underline rgba(167, 139, 250, 1);
+  }
+
+  .sign {
+    display: block;
+    width: 100%;
+    background-color: rgba(167, 139, 250, 1);
+    padding: 0.75rem;
+    text-align: center;
+    color: rgba(17, 24, 39, 1);
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 600;
+  }
+
+  .social-message {
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+  }
+
+  .line {
+    height: 1px;
+    flex: 1 1 0%;
+    background-color: rgba(55, 65, 81, 1);
+  }
+
+  .social-message .message {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: rgba(156, 163, 175, 1);
+  }
+
+  .social-icons {
+    display: flex;
+    justify-content: center;
+  }
+
+  .social-icons .icon {
+    border-radius: 0.125rem;
+    padding: 0.75rem;
+    border: none;
+    background-color: transparent;
+    margin-left: 8px;
+  }
+
+  .social-icons .icon svg {
+    height: 1.25rem;
+    width: 1.25rem;
+    fill: #fff;
+  }
+
+  .signup {
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgba(156, 163, 175, 1);
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="position-fixed bottom-1 end-1 z-index-2">
+  <div class="toast fade hide p-2 bg-white" role="alert" aria-live="assertive" id="successToast" aria-atomic="true">
+    <div class="toast-header border-0">
+      <i class="material-icons text-success me-2">check</i>
+      <span class="me-auto font-weight-bold"> Food Donation Admin Dashboard </span>
+      <small class="text-body">0s ago</small>
+      <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+    </div>
+    <hr class="horizontal dark m-0">
+    <div class="toast-body">
+      Successfully Saved User Information!
+    </div>
+  </div>
+</div>
+<div class="container-fluid py-4">
+  <div class="row min-vh-80 h-100">
+
+    <!-- Edit User Modal -->
+    <div class="modal" id="editUserModal">
+      <div class="modal-dialog">
+
+        <div class="modal-content form-container">
+
+          <div class="modal-body">
+            <!-- Form for editing user info -->
+            <p class="title">Edit Info</p>
+            <form class='form' id="editUserForm">
+              <div class="input-group mb-3">
+                <label for="editUserID">ID</label>
+                <input class='input' type="text" class="form-control text-danger" id="editUserID" name="editUserID"
+                  readonly>
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editFirstName">First Name</label>
+                <input class='input' type="text" id="editFirstName" name="editFirstName">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editLastName">Last Name</label>
+                <input type="text" id="editLastName" name="editLastName">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editAddress">Address</label>
+                <input type="text" id="editAddress" name="editAddress">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editPhone">Phone</label>
+                <input type="text" id="editPhone" name="editPhone">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editEmail">Email Address</label>
+                <input type="text" id="editEmail" name="editEmail">
+                <span class="input-border"></span>
+              </div>
+              <!-- Add other input fields for editing user info -->
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="bg-danger sign btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="sign btn btn-primary bg-success" id="saveChangesBtn">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Edit User Modal -->
+
+    <!-- Donor users card -->
+    <div class="col-md-6 mt-2">
+      <div class="card">
+        <div class="card-header pb-0 px-3">
+          <h6 class="mb-0">Donors</h6>
+        </div>
+        <div class="card-body pt-4 p-3">
+          <ul class="list-group">
+            {% for donor in donors %}
+            <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-3 text-sm">{{ donor.first_name + ' ' + donor.last_name }}</h6>
+                <span class="mb-2 text-xs">ID: <span class="text-dark font-weight-bold ms-sm-2">{{ donor.id
+                }}</span></span>
+                <span class="mb-2 text-xs">Address: <span class="text-dark font-weight-bold ms-sm-2">{{ donor.address
+                    }}</span></span>
+                <span class="mb-2 text-xs">Email Address: <span class="text-dark ms-sm-2 font-weight-bold">{{
+                    donor.email }}</span></span>
+                <span class="mb-2 text-xs">Phone Number: <span class="text-dark ms-sm-2 font-weight-bold">{{
+                    donor.phone_number }}</span></span>
+                <span class="mb-2 text-xs">Join Date: <span class="text-dark ms-sm-2 font-weight-bold">{{
+                    donor.created_at }}</span></span>
+              </div>
+              <div class="ms-auto text-end">
+                <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i
+                    class="material-icons text-sm me-2">delete</i>Delete</a>
+                <button data-user-id="{{ donor.id }}" class="btn btn-link text-dark px-3 mb-0 edit-btn"><i
+                    class="material-icons text-sm me-2">edit</i>Edit</button>
+              </div>
+            </li>
+            <hr class="dark horizontal my-0">
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Donor Users Card End -->
+
+    <!-- Volunteer Users Card -->
+    <div class="col-md-6 mt-2">
+      <div class="card">
+        <div class="card-header pb-0 px-3">
+          <h6 class="mb-0">Volunteers</h6>
+        </div>
+        <div class="card-body pt-4 p-3">
+          <ul class="list-group">
+            {% for volunteer in volunteers %}
+            <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-3 text-sm">{{ volunteer.first_name + ' ' + volunteer.last_name }}</h6>
+                <span class="mb-2 text-xs">ID: <span class="text-dark font-weight-bold ms-sm-2">{{ volunteer.id
+                    }}</span></span>
+                <span class="mb-2 text-xs">Address: <span class="text-dark font-weight-bold ms-sm-2">{{
+                    volunteer.address }}</span></span>
+                <span class="mb-2 text-xs">Email Address: <span class="text-dark ms-sm-2 font-weight-bold">{{
+                    volunteer.email }}</span></span>
+                <span class="mb-2 text-xs">Phone Number: <span class="text-dark ms-sm-2 font-weight-bold">{{
+                    volunteer.phone_number }}</span></span>
+                <span class="mb-2 text-xs">Join Date: <span class="text-dark ms-sm-2 font-weight-bold">{{
+                    volunteer.created_at }}</span></span>
+              </div>
+              <div class="ms-auto text-end">
+                <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i
+                    class="material-icons text-sm me-2">delete</i>Delete</a>
+                <button data-user-id="{{ volunteer.id }}" class="btn btn-link text-dark px-3 mb-0 edit-btn"><i
+                    class="material-icons text-sm me-2">edit</i>Edit</button>
+              </div>
+            </li>
+            <hr class="dark horizontal my-0">
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Volunteer Users End -->
+  </div>
+
+  {% include 'dashboard/includes/footer.html' %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+  document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const userId = btn.dataset.userId;
+      const user = await fetch(`/get_user/${userId}`).then(response => response.json());
+      // Populate modal fields with user data
+      document.getElementById('editUserID').value = userId;
+      document.getElementById('editFirstName').value = user.first_name;
+
+      document.getElementById('editLastName').value = user.last_name;
+
+      document.getElementById('editAddress').value = user.address;
+
+      document.getElementById('editPhone').value = user.phone_number;
+
+      document.getElementById('editEmail').value = user.email;
+      // Populate other fields similarly
+      // Show the modal
+
+      editUserModal.show();
+    });
+  });
+
+  // Save Changes Button Click Event
+  document.getElementById('saveChangesBtn').addEventListener('click', async () => {
+    const userId = document.getElementById('editUserID').value;
+    const updatedUserData = {
+      // Get updated user data from modal fields
+      first_name: document.getElementById('editFirstName').value,
+
+      last_name: document.getElementById('editLastName').value,
+
+      address: document.getElementById('editAddress').value,
+
+      phone_number: document.getElementById('editPhone').value,
+
+      email: document.getElementById('editEmail').value,
+    };
+    const response = await fetch(`/update_user/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedUserData)
+    });
+    // Close the modal
+    if (response.ok) {
+      editUserModal.hide();
+      // Show success toast
+      const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+      successToast.show();
+    }
+  });
+</script>
+{% endblock javascripts %}
