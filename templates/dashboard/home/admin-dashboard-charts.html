@@ -1,5 +1,13 @@
 <script src="/static/assets/js/plugins/chartjs.min.js"></script>
 <script>
+  fetch('/admin-dashboard-stats')
+  .then(response => response.json())
+  .then(userinfo => {
+    document.getElementById('regUsers').innerText = userinfo.user_count;
+    document.getElementById('totalReqs').innerText = userinfo.total_donation_requests;
+    document.getElementById('pendingReqs').innerText = userinfo.pending_donation_requests;
+  });
+
   var ctx = document.getElementById("chart-bars").getContext("2d");
   fetch('/traffic-data')
     .then(response => response.json())

@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_login import LoginManager, login_user, UserMixin, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from models import app, db, User, UserGroup, DonationFood, WebsiteTraffic
+from models import app, db, User, UserGroup, DonationFood, WebsiteTraffic, Blog
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
@@ -157,6 +157,12 @@ def logout():
 def show_current_users():
     users = User.query.all()
     return render_template('/home/show-users.html', users= users)
+
+
+@app.route('/blog')
+def blog():
+    blogs = Blog.query.all()
+    return render_template('/home/blog.html', blogs= blogs)
 
 @app.route('/edit-user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -382,6 +388,79 @@ def get_traffic_data():
     }
 
     return jsonify(traffic_data_dict)
+
+@app.route('/admin-dashboard-stats')
+@login_required
+@admin_required
+def admin_dashboard_stats():
+   
+    user_count = User.query.count()
+
+    
+    total_donation_requests = DonationFood.query.count()
+
+    pending_donation_requests = DonationFood.query.filter_by(status='pending').count()
+
+    return jsonify({
+        'user_count': user_count,
+        'total_donation_requests': total_donation_requests,
+        'pending_donation_requests': pending_donation_requests
+    })
+
+@app.route('/post-blog', methods=['GET','POST'])
+@login_required
+@admin_required
+def post_blog():
+    if request.method == 'GET':
+        return render_template('dashboard/home/admin-create-blog.html')
+    if request.method == 'POST': 
+        data = request.form
+        image = request.files.get('image')
+        if image:
+            image_path = f"static/uploads/blog/{image.filename}"
+            image.save(image_path)
+        else:
+            image_path = None
+        new_blog = Blog(title=data['title'], content=data['content'], author=data['author'], image_path=image_path)
+        db.session.add(new_blog)
+        db.session.commit()
+        return jsonify({'message': 'Blog posted successfully'})
+
+@app.route('/get-blogs', methods=['GET'])
+@login_required
+@admin_required
+def get_blogs():
+    blogs = Blog.query.all()
+    blog_list = []
+    for blog in blogs:
+        blog_list.append({
+            'id': blog.id,
+            'title': blog.title,
+            'image_path':blog.image_path,
+            'content': blog.content,
+            'author': blog.author,
+            'created_at': blog.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        })
+    return jsonify(blog_list)
+
+@app.route('/view-blog/<int:id>', methods=['GET'])
+@login_required
+@admin_required
+def view_blog(id):
+    blog = Blog.query.get(id)
+    if not blog:
+        return render_template('home/page-404.html')
+    
+    blog_data = {
+        'id': blog.id,
+        'title': blog.title,
+        'image_path':blog.image_path,
+        'content': blog.content,
+        'author': blog.author,
+        'created_at': blog.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    }
+    
+    return render_template('home/blog-details.html', blog = blog_data)
 
 @app.before_request
 def update_traffic():

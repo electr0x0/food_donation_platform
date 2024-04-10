@@ -1,0 +1,142 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Template Page {% endblock %}
+
+{% block body_class %} index-page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  .new_card {
+    position: relative;
+    width: 300px;
+    height: 500px;
+    margin: 20px;
+    border-radius: 10px;
+    /* overflow: hidden; */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  .card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  .card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  .card__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+    transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  .card__title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .card__text {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .card__button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+  .new_card:hover {
+    transform: translateY(-10px);
+  }
+
+  .new_card:hover .card__image img {
+    transform: scale(1.2);
+  }
+
+  .new_card:hover .card__content {
+    transform: translateY(-100%);
+  }
+
+  .card__image {
+    height: 500px;
+    width: 300px;
+    background-color: #000;
+    /* you can put img url here  */
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% include 'includes/navigation.html' %}
+
+<div class="page-header min-vh-50"
+  style="background-image: url('https://images.unsplash.com/photo-1432821596592-e2c18b78144f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+  <span class="mask bg-gradient-dark opacity-6"></span>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <div class="text-center">
+          <h1 class="text-white">Blogs</h1>
+          <h3 class="text-white">Articles and Latest News About our Activity</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+  <div class="container">
+
+
+    <div class="row">
+      {% for blog in blogs %}
+      <div class="col-lg-3 col-sm-1 col-md-6">
+        <!-- blog card template -->
+        <div class="new_card">
+          <div class="card__image">
+            <img
+              src="{{ blog.image_path }}"
+              alt="">
+          </div>
+          <div class="card__content">
+            <p class="card__title">{{ blog.title }}</p>
+            <p class="card__text">{{ blog.content | escape | truncate(20, True)}}</p>
+            <p class='text-sm'><b>Author: </b>{{blog.author}}<br><b>Published at: </b>{{blog.created_at}}</p>
+            <a class="card__button" href="/view-blog/{{blog.id}}">Read More</a>
+            
+          </div>
+        </div>
+      </div>
+      <!-- blog card template -->
+      {% endfor %}
+    </div>
+
+
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

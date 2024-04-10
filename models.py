@@ -7,6 +7,7 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from dotenv import load_dotenv
+from sqlalchemy.dialects.mysql import LONGTEXT
 
 load_dotenv()
 
@@ -90,3 +91,12 @@ class WebsiteTraffic(db.Model):
 
     def __repr__(self):
         return f"WebsiteTraffic(date={self.date}, views={self.views})"
+    
+
+class Blog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(LONGTEXT, nullable=False)
+    author = db.Column(db.String(50), nullable=False)
+    image_path = db.Column(db.String(250), nullable=True)  # New column for image path
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

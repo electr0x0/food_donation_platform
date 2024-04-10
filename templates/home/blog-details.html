@@ -1,0 +1,39 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Template Page {% endblock %} 
+
+{% block body_class %} index-page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% include 'includes/navigation.html' %}
+
+  <div class="page-header min-vh-45" style="background-image: url(' http://192.168.0.103:5000/{{ blog.image_path }}')">
+    <span class="mask bg-gradient-dark opacity-6"></span>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="text-center">
+            <h1 class="text-white">{{ blog.title }}</h1>
+            <h3 class="text-white">{{ blog.author }}</h3>
+            <h6 class="text-white">{{ blog.created_at }}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+    <div class="container">
+
+      {{ blog.content | safe }}
+
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

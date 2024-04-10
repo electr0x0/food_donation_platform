@@ -1,0 +1,197 @@
+{% extends "dashboard/layouts/base.html" %}
+
+{% block title %} Create Blog Post {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<!-- Include third-party CSS files here if needed -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<style>
+  .textInputWrapper {
+    position: relative;
+    margin: 12px 5px 0px 0px;
+    --accent-color: purple;
+  }
+
+  .textInputWrapper:before {
+    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  }
+
+  .textInputWrapper:before,
+  .textInputWrapper:after {
+    content: "";
+    left: 0;
+    right: 0;
+    position: absolute;
+    pointer-events: none;
+    bottom: -1px;
+    z-index: 4;
+    width: 100%;
+  }
+
+  .textInputWrapper:focus-within:before {
+    border-bottom: 1px solid var(--accent-color);
+  }
+
+  .textInputWrapper:before {
+    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  }
+
+  .textInputWrapper:focus-within:before {
+    border-bottom: 1px solid var(--accent-color);
+    transform: scaleX(1);
+  }
+
+  .textInputWrapper:focus-within:after {
+    border-bottom: 2px solid var(--accent-color);
+    transform: scaleX(1);
+  }
+
+  .textInputWrapper:after {
+    content: "";
+    transform: scaleX(0);
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    will-change: transform;
+    border-bottom: 2px solid var(--accent-color);
+    border-bottom-color: var(--accent-color);
+  }
+
+  .textInput::placeholder {
+    transition: opacity 250ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    opacity: 1;
+    user-select: none;
+    color: rgba(255, 255, 255, 0.582);
+  }
+
+  .textInputWrapper .textInput {
+    border-radius: 5px 5px 0px 0px;
+    box-shadow: 0px 2px 5px rgb(35 35 35 / 30%);
+    max-height: 36px;
+    background-color: #252525;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-duration: 200ms;
+    transition-property: background-color;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px;
+    width: 100%;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+  }
+
+  .textInputWrapper .textInput:focus,
+  .textInputWrapper .textInput:active {
+    outline: none;
+  }
+
+  .textInputWrapper:focus-within .textInput,
+  .textInputWrapper .textInput:focus,
+  .textInputWrapper .textInput:active {
+    background-color: #353535;
+  }
+
+  .textInputWrapper:focus-within .textInput::placeholder {
+    opacity: 0;
+  }
+
+  .note-editable {
+    background: #353535;
+  }
+
+  .note-btn.dropdown-toggle:after {
+    content: none;
+  }
+
+  .note-btn[aria-label="Help"] {
+    display: none;
+  }
+
+  .note-editor .note-toolbar .note-color-all .note-dropdown-menu,
+  .note-popover .popover-content .note-color-all .note-dropdown-menu {
+    min-width: 185px;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+  <div class="row min-vh-80 h-100">
+    <div class="col-12">
+      <!-- Blog Post Form -->
+      <form id="blogForm">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <div class="textInputWrapper">
+            <input type="text" class="textInput" id="title" name="title" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="content" class="form-label">Content</label>
+          <div class="textInputWrapper">
+            <textarea class="textInput" id="content" name="content" required></textarea>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="author" class="form-label">Author</label>
+          <div class="textInputWrapper">
+            <input type="text" class="textInput" id="author" name="author" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Image</label>
+          <div class="textInputWrapper">
+            <input type="file" class="textInput" id="image" name="image">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  {% include 'dashboard/includes/footer.html' %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- Include third-party JavaScript files here if needed -->
+<script>
+   $(document).ready(function() {
+        $('#content').summernote({
+          placeholder: 'Write your blog content here...',
+        height: 400
+        });
+        var noteBar = $('.note-toolbar');
+        noteBar.find('[data-toggle]').each(function() {
+            $(this).attr('data-bs-toggle', $(this).attr('data-toggle')).removeAttr('data-toggle');
+        });
+    });
+
+  document.getElementById('blogForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('title', document.getElementById('title').value);
+    formData.append('content', $('#content').summernote('code'));
+    formData.append('author', document.getElementById('author').value);
+    formData.append('image', document.getElementById('image').files[0]);
+    const response = await fetch('/post-blog', {
+      method: 'POST',
+      body: formData
+    });
+    if (response.ok) {
+      alert('Blog posted successfully');
+      // Redirect or perform any other action upon successful blog post
+    } else {
+      alert('Failed to post blog');
+    }
+  });
+</script>
+{% endblock javascripts %}
