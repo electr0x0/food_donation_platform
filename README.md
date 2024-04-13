@@ -9,7 +9,7 @@ This project is a web application built using Flask, a lightweight web framework
 - Donation request creation and management
 - Volunteer sign-up and food pickup scheduling
 - Admin dashboard for managing users and donations
-
+- & Many More
 
 # How to Run:
 
@@ -28,11 +28,11 @@ This project is a web application built using Flask, a lightweight web framework
 
 - `python app.py`
 
-5. Access the application in your web browser at http://localhost:5000.
+5. Access the application in your web browser at http://domain:5000.
 
-6. Goto http://localhost:5000/update-groups to create user groups.
+6. Goto these urls http://domain:5000/update-groups & http://domain:5000/init-admin to create user groups and admin user (for first run).
 
-## Note: Make sure to configure the database connection string and other environment variables as necessary.
+## Note: Make sure to configure the database connection string and other environment variables as necessary found in .env .
 
 # Contributing:
 

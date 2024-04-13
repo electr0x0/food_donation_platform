@@ -430,6 +430,8 @@
       phone_number: document.getElementById('editPhone').value,
 
       email: document.getElementById('editEmail').value,
+
+      about: document.getElementById('editAbout').value
     };
     const response = await fetch(`/update_user_pub/${userId}`, {
       method: 'POST',
