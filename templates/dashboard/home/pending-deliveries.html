@@ -3,12 +3,26 @@
 {% block title %} Pickup Food {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+  .image-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 
 <div class="container py-4">
-  <div class="row">
+  <div class="row vh-100">
     <div class="col-lg-12 col-md-8 mx-auto">
       <div class="card mt-4 form-container neon-border">
         <span></span>
@@ -17,19 +31,23 @@
         <span></span>
         <!-- Card Header Start -->
         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Pending Food Donations</h6>
+          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg d-flex justify-content-center">
+            <dotlottie-player src="/static/assets/anim/pending.json" background="transparent" class="p-0 m-0" speed="1" style="width: 300px; height: 200px;" loop autoplay></dotlottie-player>
           </div>
         </div>
         <!-- Card Header End -->
         <div class="card-body">
           <div class="row justify-content-center">
             {% for food in deliveries %}
+            {% if food.status != 'delivered' %}
             <div class="col-lg-12 mb-4">
               <div class="card">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <img src="{{ food.image_path }}" class="img-fluid rounded-start" alt="Food Image">
+                    <a class="d-block shadow-xl border-radius-xl image-container">
+                      <img src="{{ food.image_path }}" alt="img-blur-shadow"
+                        class="img-fluid shadow border-radius-xl image">
+                    </a>
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
@@ -39,19 +57,63 @@
                       <p class="card-text">Expiry Date: {{ food.expiry_date }}</p>
                       <p class="card-text">Description: {{ food.description }}</p>
                       <!-- Donator details -->
-                      <p class="card-text">Donator: {{ food.user.first_name }} {{ food.user.last_name }}</p>
-                      <p class="card-text">Donator Phone Number: {{ food.user.phone_number }}</p>
-                      <p class="card-text">Donator Address: {{ food.user.address }}</p>
-                      <form method="post" action="{{ url_for('pending_deliveries') }}">
-                        <input type="hidden" name="status" value="pending">
-                        <input type="hidden" name="id" value="{{ food.id }}">
-                        <button type="submit" class="btn btn-primary">Cancel Pickup</button>
-                      </form>
+                      <p class="card-text">Donor: {{ food.user.first_name }} {{ food.user.last_name }}</p>
+                      <p class="card-text">Donor Phone Number: {{ food.user.phone_number }}</p>
+                      <p class="card-text">Donor Address: {{ food.user.address }}</p>
+                      <div class="d-flex flex-row gap-2 justify-content-around">
+
+                        {% if food.status == 'accepted' %}
+                        <form method="post" action="{{ url_for('pending_deliveries') }}">
+                          <input type="hidden" name="status" value="picked">
+                          <input type="hidden" name="id" value="{{ food.id }}">
+                          <button type="submit" class="btn btn-success">Mark As Picked</button>
+                        </form>
+                        {% endif %}
+
+                        {% if food.status == 'picked' %}
+                        <form method="post" action="{{ url_for('pending_deliveries') }}">
+                          <input type="hidden" name="status" value="delivered">
+                          <input type="hidden" name="id" value="{{ food.id }}">
+                          <button type="submit" class="btn btn-success">Mark As Delivered To Warehouse</button>
+                        </form>
+                        {% endif %}
+
+                        {% if food.status == 'picked' %}
+                        <a href="https://www.google.com/maps/dir/{{dono_lat}},{{dono_lng}}/23.8313216,90.3977207"
+                          class="btn btn-dark">Navigation to our Warehouse</a>
+                        {% endif %}
+
+                        {% if food.status == 'accepted' %}
+                        <form method="post" action="{{ url_for('more_info_delivery') }}">
+                          <input type="hidden" name="id" value="{{ food.id }}">
+                          <button type="submit" class="btn btn-dark">More Info</button>
+                        </form>
+                        {% endif %}
+
+                        {% if food.status == 'accepted' %}
+                        <form method="post" action="{{ url_for('pending_deliveries') }}">
+                          <input type="hidden" name="type" value="cancel">
+                          <input type="hidden" name="status" value="pending">
+                          <input type="hidden" name="id" value="{{ food.id }}">
+                          <button type="submit" class="btn btn-primary">Cancel Pickup</button>
+                        </form>
+                        {% endif %}
+
+                        {% if food.status =='delivered' %}
+                        <div class="d-flex flex-row align-items-center">
+                          <i class="fas fa-check-circle fa-2x me-2 text-success mb-3"></i>
+                          <p class="text-success fw-bold">Thank you for volunteering!</p>
+                        </div>
+                        {% endif %}
+
+                        
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            {% endif %}
             {% endfor %}
           </div>
         </div>

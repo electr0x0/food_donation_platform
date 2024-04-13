@@ -3,11 +3,237 @@
 {% block title %} Profile {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+  .image-container {
+    width: 100%;
+    height: 200px; /* Set the desired height for the card */
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Ensures the image covers the entire container */
+}
+
+</style>
+
+<style>
+  .form-container {
+    border-radius: 0.75rem;
+    background-color: rgba(17, 24, 39, 1);
+    padding: 2rem;
+    color: rgba(243, 244, 246, 1);
+  }
+
+  .title {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+  }
+
+  .form {
+    margin-top: 1.5rem;
+  }
+
+  .input-group {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .input-group label {
+    display: block;
+    color: rgba(156, 163, 175, 1);
+    margin-bottom: 4px;
+  }
+
+  .input-group input {
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(55, 65, 81, 1);
+    outline: 0;
+    background-color: rgba(17, 24, 39, 1);
+    padding: 0.75rem 1rem;
+    color: rgba(243, 244, 246, 1);
+  }
+
+  .input-group input:focus {
+    border-color: rgba(167, 139, 250);
+  }
+
+  .forgot {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgba(156, 163, 175, 1);
+    margin: 8px 0 14px 0;
+  }
+
+  .forgot a,
+  .signup a {
+    color: rgba(243, 244, 246, 1);
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .forgot a:hover,
+  .signup a:hover {
+    text-decoration: underline rgba(167, 139, 250, 1);
+  }
+
+  .sign {
+    display: block;
+    width: 100%;
+    background-color: rgba(167, 139, 250, 1);
+    padding: 0.75rem;
+    text-align: center;
+    color: rgba(17, 24, 39, 1);
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 600;
+  }
+
+  .social-message {
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+  }
+
+  .line {
+    height: 1px;
+    flex: 1 1 0%;
+    background-color: rgba(55, 65, 81, 1);
+  }
+
+  .social-message .message {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: rgba(156, 163, 175, 1);
+  }
+
+  .social-icons {
+    display: flex;
+    justify-content: center;
+  }
+
+  .social-icons .icon {
+    border-radius: 0.125rem;
+    padding: 0.75rem;
+    border: none;
+    background-color: transparent;
+    margin-left: 8px;
+  }
+
+  .social-icons .icon svg {
+    height: 1.25rem;
+    width: 1.25rem;
+    fill: #fff;
+  }
+
+  .signup {
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgba(156, 163, 175, 1);
+  }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 
+<div class="position-fixed bottom-1 end-1 z-index-2">
+  <div class="toast fade hide p-2 bg-white" role="alert" aria-live="assertive" id="successToast" aria-atomic="true">
+    <div class="toast-header border-0">
+      <i class="material-icons text-success me-2">check</i>
+      <span class="me-auto font-weight-bold"> Food Donation Admin Dashboard </span>
+      <small class="text-body">0s ago</small>
+      <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+    </div>
+    <hr class="horizontal dark m-0">
+    <div class="toast-body">
+      Successfully Edited Your Profile Information!
+    </div>
+  </div>
+</div>
+
     <div class="container-fluid px-2 px-md-4">
+
+       <!-- Edit User Modal -->
+    <div class="modal" id="editUserModal">
+      <div class="modal-dialog">
+
+        <div class="modal-content form-container">
+
+          <div class="modal-body">
+            <!-- Form for editing user info -->
+            <p class="title">Edit Info</p>
+            <form class='form' id="editUserForm">
+              <div class="input-group mb-3">
+                <label for="editUserID">ID</label>
+                <input class='input' type="text" class="form-control text-danger" id="editUserID" name="editUserID"
+                  readonly>
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editFirstName">First Name</label>
+                <input class='input' type="text" id="editFirstName" name="editFirstName">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editLastName">Last Name</label>
+                <input type="text" id="editLastName" name="editLastName">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editAddress">Address</label>
+                <input type="text" id="editAddress" name="editAddress">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editPhone">Phone</label>
+                <input type="text" id="editPhone" name="editPhone">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editAbout">About</label>
+                <input type="area" id="editAbout" name="editAbout">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="newPass">Change Password</label>
+                <input type="password" id="newPass" name="newPass">
+                <span class="input-border"></span>
+              </div>
+
+              <div class="input-group mb-3">
+                <label for="editEmail">Email Address</label>
+                <input type="text" id="editEmail" name="editEmail" readonly>
+                <span class="input-border"></span>
+              </div>
+              <!-- Add other input fields for editing user info -->
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="bg-danger sign btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="sign btn btn-primary bg-success" id="saveChangesBtn">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Edit User Modal -->
+
       <div class="page-header min-height-300 border-radius-xl mt-4" 
            style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
         <span class="mask  bg-gradient-primary  opacity-6"></span>
@@ -16,7 +242,7 @@
         <div class="row gx-4 mb-2">
           <div class="col-auto">
             <div class="avatar avatar-xl position-relative">
-              <img src="/static/assets/img/bruce-mars.jpg" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+              <img src="{{ current_user.profile_pictutre }}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
             </div>
           </div>
           <div class="col-auto my-auto">
@@ -67,15 +293,16 @@
                       <h6 class="mb-0">Profile Information</h6>
                     </div>
                     <div class="col-md-4 text-end">
+                      
                       <a href="javascript:;">
-                        <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Profile"></i>
+                        <i data-user-id="{{ current_user.id }}" class="fas fa-user-edit text-secondary text-sm edit-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Profile"></i>
                       </a>
                     </div>
                   </div>
                 </div>
                 <div class="card-body p-3">
                   <p class="text-sm">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed possimus, quas nostrum iusto minima vero tempora non sit enim quia?.
+                    {{ current_user.about }}
                   </p>
                   <hr class="horizontal gray-light my-4">
                   <ul class="list-group">
@@ -121,8 +348,9 @@
                 <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
                   <div class="card card-blog card-plain">
                     <div class="card-header p-0 mt-n4 mx-3">
-                      <a class="d-block shadow-xl border-radius-xl">
-                        <img src="{{ food.image_path }}" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                      <a class="d-block shadow-xl border-radius-xl image-container">
+                        <img src="{{ food.image_path }}" alt="img-blur-shadow"
+                          class="img-fluid shadow border-radius-xl image">
                       </a>
                     </div>
                     <div class="card-body p-3">
@@ -161,4 +389,62 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script>
+   const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+  document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const userId = btn.dataset.userId;
+      const user = await fetch(`/get_user_pub/${userId}`).then(response => response.json());
+      // Populate modal fields with user data
+      document.getElementById('editUserID').value = userId;
+      document.getElementById('editFirstName').value = user.first_name;
+
+      document.getElementById('editLastName').value = user.last_name;
+
+      document.getElementById('editAddress').value = user.address;
+
+      document.getElementById('editPhone').value = user.phone_number;
+
+      document.getElementById('editEmail').value = user.email;
+
+      document.getElementById('editAbout').value = user.about;
+      // Populate other fields similarly
+      // Show the modal
+
+      editUserModal.show();
+    });
+  });
+
+  // Save Changes Button Click Event
+  document.getElementById('saveChangesBtn').addEventListener('click', async () => {
+    const userId = document.getElementById('editUserID').value;
+    const updatedUserData = {
+      // Get updated user data from modal fields
+      first_name: document.getElementById('editFirstName').value,
+
+      last_name: document.getElementById('editLastName').value,
+
+      address: document.getElementById('editAddress').value,
+
+      phone_number: document.getElementById('editPhone').value,
+
+      email: document.getElementById('editEmail').value,
+    };
+    const response = await fetch(`/update_user_pub/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedUserData)
+    });
+    // Close the modal
+    if (response.ok) {
+      editUserModal.hide();
+      // Show success toast
+      const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+      successToast.show();
+    }
+  });
+</script>
+{% endblock javascripts %}

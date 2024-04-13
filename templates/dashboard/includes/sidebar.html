@@ -59,7 +59,7 @@
 
         <li class="nav-item">
           <a class="nav-link text-white {% if 'donate-food' in segment %} active bg-gradient-primary {% endif %}" 
-             href="/manage-users">
+             href="/view-posts">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">view_list</i>
             </div>
@@ -96,7 +96,7 @@
 
         {% if current_user.user_group_id == 2 %}
         <li class="nav-item mt-3">
-          <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Pickup Food</h6>
+          <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Volunteering Options</h6>
         </li>
 
         <li class="nav-item">
@@ -105,7 +105,7 @@
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">location_searching</i>
             </div>
-            <span class="nav-link-text ms-1">Pickup Food</span>
+            <span class="nav-link-text ms-1">Donation Requests</span>
           </a>
         </li>
 
@@ -113,9 +113,9 @@
           <a class="nav-link text-white {% if 'pickup-food' in segment %} active bg-gradient-primary {% endif %}" 
              href="/pending-deliveries">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">location_searching</i>
+              <i class="material-icons opacity-10">pending</i>
             </div>
-            <span class="nav-link-text ms-1">Pending deliveries</span>
+            <span class="nav-link-text ms-1">Your Pending deliveries</span>
           </a>
         </li>
         {% endif %}
@@ -123,6 +123,19 @@
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">User</h6>
         </li>
+
+        {% if current_user.user_group_id == 2 %}
+
+        <li class="nav-item">
+          <a class="nav-link " href="/volunteer-history">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons-round opacity-10">history</i>
+            </div>
+            <span class="nav-link-text me-1">Delivery History</span>
+          </a>
+        </li>
+
+        {% endif %}
 
         <li class="nav-item">
           <a class="nav-link " href="/profile">

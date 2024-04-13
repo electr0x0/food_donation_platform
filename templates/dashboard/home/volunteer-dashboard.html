@@ -1,0 +1,154 @@
+<div class="row">
+  <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+    <div class="card">
+      <div class="card-header p-3 pt-2">
+        <div
+          class="icon icon-lg icon-shape bg-gradient-dark shadow-success text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10">volunteer_activism</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize">Donation Request Accepted</p>
+          <h4 class="mb-0" id="donoAccepted">0</h4>
+        </div>
+      </div>
+      <hr class="dark horizontal my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder"> No. of donation request accepted by you</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+    <div class="card">
+      <div class="card-header p-3 pt-2">
+        <div
+          class="icon icon-lg icon-shape bg-gradient-success shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10">done</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize">Successful Deliveries</p>
+          <h4 class="mb-0" id="successDonos">0</h4>
+        </div>
+      </div>
+      <hr class="dark horizontal my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">- </span>No. donated food that you delivered succesfully
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+    <div class="card">
+      <div class="card-header p-3 pt-2">
+        <div
+          class="icon icon-lg icon-shape bg-gradient-danger shadow-danger text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10">pending</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize">Pending Deliveres</p>
+          <h4 class="mb-0" id="pendingReqs">0</h4>
+        </div>
+      </div>
+      <hr class="dark horizontal my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-2%</span> than yesterday</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-4">
+
+  <div class="col-lg-12 mt-3 mb-3">
+    <div class="card z-index-2 ">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+        <div class="bg-gradient-success shadow-dark border-radius-lg py-3 pe-1">
+          <div class="chart">
+            <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <h6 class="mb-0 ">Travel Distance Frequency</h6>
+        <p class="text-sm ">Distance you have covered for picking up food</p>
+        <hr class="dark horizontal">
+        <div class="d-flex ">
+          <i class="material-icons text-sm my-auto me-1">schedule</i>
+          <p class="mb-0 text-sm">just updated</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card z-index-2">
+  <div class="card-header pb-0">
+    <div class="row">
+      <div class="col-lg-6 col-7">
+        <h6>Instructions for Picking up Food Donations</h6>
+        <p class="text-sm mb-0">
+          <i class="fa fa-check-circle text-info me-1" aria-hidden="true"></i>
+          <span class="font-weight-bold">Food Safety Guidelines</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="card-body px-0 pb-2">
+
+    <ol class="list-group">
+      <li class="list-group-item">
+        <i class="fas fa-phone-alt me-2 text-success"></i>
+        <strong>Contact the Donor:</strong> Reach out to the donor via phone or text message to confirm the details of the donation, including the pickup location, preferred pickup time, and any specific instructions.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-hands-wash me-2 text-success"></i>
+        <strong>Prepare Necessary Supplies:</strong> Ensure you have all the necessary supplies for safe and hygienic food handling, including gloves, masks, hand sanitizer, and reusable bags or containers for transporting the food.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-clipboard-check me-2 text-success"></i>
+        <strong>Check Food Safety:</strong> Before accepting the donation, inspect the food items to ensure they are safe for consumption. Check for any signs of spoilage, damage to packaging, or expiration dates.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-hands-wash me-2 text-success"></i>
+        <strong>Maintain Hygiene:</strong> Wash your hands thoroughly with soap and water before and after handling the food. If soap and water are not available, use hand sanitizer with at least 60% alcohol.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-boxes me-2 text-success"></i>
+        <strong>Use Proper Packaging:</strong> Pack the donated food items securely in clean and sanitized containers or bags to prevent contamination during transport.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-hands me-2 text-success"></i>
+        <strong>Handle with Care:</strong> Handle the food items with care to avoid damage or spillage. Use caution when loading and unloading the items to prevent accidents or breakage.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-truck me-2 text-success"></i>
+        <strong>Transport Safely:</strong> Transport the donated food items to the designated drop-off location or distribution center using safe and sanitary transportation methods. Avoid overcrowding and practice social distancing during transit.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-list-alt me-2 text-success"></i>
+        <strong>Follow Instructions:</strong> Follow any specific instructions provided by the donor regarding handling or storing the food items. Respect the donor's preferences and ensure the food is handled according to their wishes.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-clipboard-list me-2 text-success"></i>
+        <strong>Document the Donation:</strong> Keep records of the donated food items, including the type and quantity of items collected, as well as any additional notes or instructions provided by the donor.
+      </li>
+
+      <li class="list-group-item">
+        <i class="fas fa-hands-helping me-2 text-success"></i>
+        <strong>Express Gratitude:</strong> Thank the donor for their generosity and support in helping to provide food for those in need. Acknowledge their contribution and express appreciation for their donation.
+      </li>
+    </ol>
+
+  </div>
+</div>
+
+
+
+</div>
+</div>

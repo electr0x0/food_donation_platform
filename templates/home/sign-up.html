@@ -6,7 +6,6 @@
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
-
 {% endblock stylesheets %}
 
 {% block content %}
@@ -17,6 +16,26 @@
   style="background-image: url('https://e0.pxfuel.com/wallpapers/909/210/desktop-wallpaper-charity-background-charity.jpg');"
   loading="lazy">
   <span class="mask bg-gradient-dark opacity-6"></span>
+
+  <!-- Modal for address picker -->
+  <div class="modal" id="addressModal">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Select Address</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Add map element inside modal body -->
+          <div id="map" style="width: 100%; height: 500px;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container my-auto">
     <div class="row">
       <div class="col-lg-5 col-md-8 col-12 mx-auto mt-5">
@@ -34,19 +53,26 @@
                 <label class="form-label">Username</label>
                 <input name="username" class="form-control" required>
               </div>
+
               <div class="input-group input-group-outline my-3">
                 <label class="form-label">First Name</label>
                 <input name="first_name" class="form-control" required>
               </div>
+
               <div class="input-group input-group-outline my-3">
                 <label class="form-label">Last Name</label>
                 <input name="last_name" class="form-control" required>
               </div>
 
+
+
               <div class="input-group input-group-outline my-3">
-                <label class="form-label">Address</label>
-                <input name="address" class="form-control" required>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#addressModal" class="input-group-text btn me-2"><i class="fas fa-map" aria-hidden="true"></i></a>
+                <input class="form-control" name="address" id="address" placeholder="Pick Address on Map" type="text" disabled>
+
+                <input class="form-control" type="hidden" name="address_coord" id="address_coord">
               </div>
+
 
               <div class="input-group input-group-outline my-3">
                 <label class="form-label">Phone Number</label>
@@ -130,34 +156,86 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 {% if user_group == 'volunteer' %}
-<script> 
+<script>
   const chBoxes = document.querySelectorAll('.dropdown-menu input[type="checkbox"]');
   const selected_skills = document.getElementById('selected_skills');
 
-  function handleCB() { 
-      const selectedSkills = []; 
+  function handleCB() {
+    const selectedSkills = [];
 
-      chBoxes.forEach((checkbox) => { 
-          if (checkbox.checked) { 
-              selectedSkills.push(checkbox.value); 
-          } 
-      });
-
-      if (selectedSkills.length === 0) {
-          // Show a modal indicating that at least one skill must be selected
-          // You can implement the modal using Bootstrap modal or any other method
-          // For simplicity, let's show an alert
-          alert('Please select at least one skill.');
-          return;
+    chBoxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        selectedSkills.push(checkbox.value);
       }
+    });
 
-      selected_skills.value = selectedSkills.join(',');
-  } 
+    if (selectedSkills.length === 0) {
+      // Show a modal indicating that at least one skill must be selected
+      // You can implement the modal using Bootstrap modal or any other method
+      // For simplicity, let's show an alert
+      alert('Please select at least one skill.');
+      return;
+    }
 
-  chBoxes.forEach((checkbox) => { 
-      checkbox.addEventListener('change', handleCB); 
+    selected_skills.value = selectedSkills.join(',');
+  }
+
+  chBoxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', handleCB);
   }); 
-</script> 
+</script>
 {% endif %}
+
+<!-- Initialize map inside the modal -->
+<script>
+  // Initialize map
+  var map = L.map('map').setView([23.685, 90.3563], 7); // Coordinates for the center of Bangladesh
+
+  // Add tile layer
+  L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+  // Create GeoSearch control
+  var searchControl = new GeoSearch.GeoSearchControl({
+    provider: new GeoSearch.OpenStreetMapProvider()
+  });
+
+  // Add control to map
+  map.addControl(searchControl);
+
+  // Function to add marker at clicked location
+  function addMarker(e) {
+    // Clear existing markers
+    map.eachLayer(function(layer) {
+      if (layer instanceof L.Marker) {
+        map.removeLayer(layer);
+      }
+    });
+
+    // Fetch formatted address from OpenCage Geocoding API
+    fetch(`https://api.opencagedata.com/geocode/v1/json?key=5c81d608dafa41489f7889c4a9523d0b&q=${e.latlng.lat}%2C+${e.latlng.lng}&pretty=1&no_annotations=1`)
+      .then(response => response.json())
+      .then(data => {
+        const formattedAddress = data.results[0].formatted;
+
+        // Add marker at clicked location with formatted address popup
+        L.marker(e.latlng).addTo(map)
+          .bindPopup(formattedAddress)
+          .openPopup();
+        input = document.getElementById('address');
+        input.value = formattedAddress;
+        input.removeAttribute('disabled');
+
+        document.getElementById('address_coord').value = `${e.latlng.lat},${e.latlng.lng}`
+      })
+      .catch(error => {
+        console.error('Error fetching address:', error);
+      });
+  }
+
+  // Listen for click event on map
+  map.on('click', addMarker);
+</script>
+
+
 
 {% endblock javascripts %}

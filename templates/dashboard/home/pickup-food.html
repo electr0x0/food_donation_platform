@@ -17,8 +17,8 @@
         <span></span>
         <!-- Card Header Start -->
         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Pending Food Donations</h6>
+          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg d-flex justify-content-center">
+            <dotlottie-player src="/static/assets/anim/donation_reqs.json" background="transparent" class="p-0 m-0" speed="1" style="width: 300px; height: 200px;" loop autoplay></dotlottie-player>
           </div>
         </div>
         <!-- Card Header End -->
@@ -40,13 +40,13 @@
                       <p class="card-text">Expiry Date: {{ food.expiry_date }}</p>
                       <p class="card-text">Description: {{ food.description }}</p>
                       <!-- Donator details -->
-                      <p class="card-text">Donator: {{ food.user.first_name }} {{ food.user.last_name }}</p>
-                      <p class="card-text">Donator Phone Number: {{ food.user.phone_number }}</p>
-                      <p class="card-text">Donator Address: {{ food.user.address }}</p>
+                      <p class="card-text">Donor: {{ food.user.first_name }} {{ food.user.last_name }}</p>
+                      <p class="card-text">Donor Phone Number: {{ food.user.phone_number }}</p>
+                      <p class="card-text">Donor Address: {{ food.user.address }}</p>
                       <form method="post" action="{{ url_for('pickup_food') }}">
-                        <input type="hidden" name="status" value="picked">
+                        <input type="hidden" name="status" value="accepted">
                         <input type="hidden" name="id" value="{{ food.id }}">
-                        <button type="submit" class="btn btn-primary">Pickup</button>
+                        <button type="submit" class="btn btn-success">Accept Donation Request</button>
                       </form>
                     </div>
                   </div>

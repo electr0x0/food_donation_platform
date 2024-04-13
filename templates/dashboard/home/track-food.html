@@ -3,7 +3,21 @@
 {% block title %} Track Food {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+  .image-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -17,8 +31,8 @@
         <span></span>
         <!-- Card Header Start -->
         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Your Food Donations</h6>
+          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg d-flex justify-content-center">
+            <dotlottie-player src="/static/assets/anim/track.json" background="transparent" class="p-0 m-0" speed="1" style="width: 300px; height: 200px;" loop autoplay></dotlottie-player>
           </div>
         </div>
         <!-- Card Header End -->
@@ -29,7 +43,10 @@
               <div class="card">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <img src="{{ food.image_path }}" class="img-fluid rounded-start" alt="Food Image">
+                    <a class="d-block shadow-xl border-radius-xl image-container">
+                      <img src="{{ food.image_path }}" alt="img-blur-shadow"
+                        class="img-fluid shadow border-radius-xl image">
+                    </a>
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
@@ -43,23 +60,23 @@
                       <!-- Status Progression -->
                       <div class="progress mt-3">
                         <div class="progress-bar bg-info" role="progressbar" style="width: 
-                          {% if food.status.lower() == 'pending' %} 25% 
-                          {% elif food.status.lower() == 'picked' %} 50% 
-                          {% elif food.status == 'processing' %} 75% 
-                          {% elif food.status == 'complete' %} 100% 
+                          {% if food.status.lower() == 'pending' %} 10% 
+                          {% elif food.status.lower() == 'accepted' %} 25% 
+                          {% elif food.status == 'picked' %} 50% 
+                          {% elif food.status == 'delivered' %} 100%
                           {% endif %}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                         </div>
                       </div>
-                      <div class="text-center">
-                          {% if food.status.lower() in ['pending', 'processing', 'picked'] %}
+                      <div class="text-center mt-2">
+                          {% if food.status.lower() in ['pending', 'accepted', 'picked'] %}
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                           {% else %}
                             <span class="tick-circle">✓</span>
                           {% endif %}
-                        <small class="text-muted">
-                          {% if food.status == 'pending' %} Pending {% elif food.status == 'picked' %} Picked up by Volunteer {%
-                          elif food.status == 'processing' %} Processing In Factory {% elif food.status == 'complete' %}
-                          Distributed {% endif %}
+                        <small class="text-muted ">
+                          {% if food.status == 'pending' %} Pending {% elif food.status == 'accepted' %} Request Accepted up by Volunteer, They are heading your way {%
+                          elif food.status == 'picked' %} Volunteer collected the Food from you {% elif food.status == 'delivered' %}
+                          The volunteer has delivered the food to our warehouse, Thank you for your donation! {% endif %}
                         </small>
                       </div>
                     </div>

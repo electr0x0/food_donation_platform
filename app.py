@@ -7,6 +7,9 @@ from werkzeug.utils import secure_filename
 from models import app, db, User, UserGroup, DonationFood, WebsiteTraffic, Blog
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from calendar import month_abbr
+from sqlalchemy import and_, func
+from geopy.distance import geodesic
 
 load_dotenv()
 
@@ -32,27 +35,80 @@ def index():
     return render_template('home/index.html', )
 
 #Dashboard Routes Start
+@app.route('/donation-frequency-data')
+@login_required
+def donation_frequency_data():
+    # Initialize donation frequency dictionary with all months and set initial values to 0
+    donation_frequency = {month: 0 for month in month_abbr[1:]}
+
+    # Query the database for donation records of the current user
+    user_id = current_user.id
+    donation_records = DonationFood.query.filter_by(user_id=user_id).all()
+
+    # Process the donation records to update donation frequency
+    for record in donation_records:
+        month = record.pickup_time.strftime('%b')  # Get the month abbreviation
+        donation_frequency[month] += 1
+
+    # Prepare the data in a format suitable for Chart.js
+    labels = list(donation_frequency.keys())
+    data = list(donation_frequency.values())
+
+    return jsonify(labels=labels, data=data)
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
     food_donations = DonationFood.query.filter_by(user_id=current_user.id).all()
     total_weight = sum(donation_request.weight_kg for donation_request in food_donations)
-    indi_weight = [0,0,0,0,0]
+    indi_weight = [0,0,0,0,0,0,0,0,0]
+    sorted_users = []
+    successful_donations = 0
+    pending_donations = 0
     
     for food in food_donations:
+        match food.status:
+            case "pending":
+                pending_donations += 1
+            case 'delivered':
+                successful_donations += 1
+                 
         match food.food_type:
             case "Fruits":
                 indi_weight[0] += food.weight_kg
             case "Vegetables":
                 indi_weight[1] += food.weight_kg
-            case "Grains":
+            case "Food in tins, jars or air sealed packages":
                 indi_weight[2] += food.weight_kg
-            case "Dairy":
+            case "Milk and dairy":
                 indi_weight[3] += food.weight_kg
-            case "Meat":
+            case "Meat, eggs and alternatives":
                 indi_weight[4] += food.weight_kg
+            case "Breads and cereals":
+                indi_weight[5] += food.weight_kg
+            case "Prepared and/or cooked meals":
+                indi_weight[6] += food.weight_kg
+            case "Drinks":
+                indi_weight[7] += food.weight_kg
+            case "Other":
+                indi_weight[8] += food.weight_kg
                 
-    return render_template('dashboard/home/index.html', segment= 'index', total_donation_req_count = len(food_donations), total_weight_of_food =total_weight, indi_donation_weight = indi_weight )
+    if current_user.user_group_id == 3:
+        users_with_donations = db.session.query(User).join(DonationFood, User.id == DonationFood.user_id).all()
+
+        user_donation_weights = {}
+        for user in users_with_donations:
+            total_weight = db.session.query(func.sum(DonationFood.weight_kg)).filter_by(user_id=user.id).scalar() or 0
+            user_donation_weights[user] = total_weight
+
+        sorted_users = sorted(user_donation_weights.items(), key=lambda x: x[1], reverse=True)
+
+        for index, (user, total_weight) in enumerate(sorted_users):
+            delivered_weight = db.session.query(func.sum(DonationFood.weight_kg)).filter_by(user_id=user.id, status='delivered').scalar() or 0
+            successful_percentage = (delivered_weight / total_weight * 100) if total_weight != 0 else 0
+            sorted_users[index] = (user, total_weight, successful_percentage)   
+                 
+    return render_template('dashboard/home/index.html', segment= 'index', total_donation_req_count = len(food_donations), total_weight_of_food =total_weight, indi_donation_weight = indi_weight , successful_donations = successful_donations, pending_donations = pending_donations, donations = food_donations[:4], sorted_users = sorted_users[:10])
 
 @app.route('/tables')
 @login_required
@@ -120,7 +176,7 @@ def submit_donation():
                 db.session.add(new_donation)
                 db.session.commit()
 
-                flash('Your donation has been submitted successfully!', 'success')
+                
                 return redirect(url_for('track_food', successmsg ='Your donation has been submitted successfully!' ))
             else:
                 flash('No file selected for upload.', 'danger')
@@ -212,6 +268,7 @@ def register(user_group):
         password = request.form['password']
         email = request.form['email']
         phonenumber = request.form['phonenumber']
+        address_coord = request.form['address_coord']
         
         user_group_name = user_group
         user_group = UserGroup.query.filter_by(name=user_group_name).first()
@@ -229,7 +286,7 @@ def register(user_group):
             flash('Email already exists', 'error')
             return redirect(url_for('register', user_group=user_group_name, errmessage='Email already exists'))
 
-        new_user = User(username=username, first_name=first_name, email=email, last_name=last_name, address=address, organization=organization, password_hash=generate_password_hash(password), user_group_id=user_group.id, phone_number=phonenumber)
+        new_user = User(username=username, first_name=first_name, email=email, last_name=last_name, address=address,address_coord = address_coord ,organization=organization, password_hash=generate_password_hash(password), user_group_id=user_group.id, phone_number=phonenumber)
 
         if user_group_name == 'volunteer':
             new_user.availability = request.form.get('availability')
@@ -285,15 +342,110 @@ def pickup_food(food_id = None):
 @app.route('/pending-deliveries', methods = ['GET', 'POST'])
 @login_required
 def pending_deliveries():
+    food_donations_deliveries = DonationFood.query.filter_by(picked_by=current_user.id).all()
     if request.method == 'POST':
         food_donation = DonationFood.query.get(request.form.get('id'))
         if food_donation:
             food_donation.status = request.form.get('status')
-            food_donation.picked_by = None
+            
+            dono = User.query.get(food_donation.user_id)
+            dono_coord = dono.address_coord.split(",") if dono.address_coord else [0, 0]
+            
+            if request.form.get('type') == 'cancel':
+                food_donation.picked_by = None
+                
             db.session.commit()
+            return render_template('dashboard/home/pending-deliveries.html', deliveries = food_donations_deliveries, dono_lat=float(dono_coord[0]), 
+                                   dono_lng=float(dono_coord[1]))
 
-    food_donations_deliveries = DonationFood.query.filter_by(picked_by=current_user.id).all()
     return render_template('dashboard/home/pending-deliveries.html', deliveries = food_donations_deliveries)
+
+@app.route('/volunteer-history', methods = ['GET'])
+@login_required
+def volunteer_history():
+    past_success_del = DonationFood.query.filter(and_(DonationFood.picked_by == current_user.id, DonationFood.status == 'delivered')).all()
+    
+    return render_template('dashboard/home/volunteer-delivery-history.html', deliveries = past_success_del)
+
+@app.route('/more-info-delivery', methods = ['POST', 'PUT'])
+@login_required
+def more_info_delivery():
+    if request.form.get('_method') == 'PUT':
+        updated_coord = request.form.get('updated_coord')
+        volun_id = request.form.get('id')
+        volunteer = User.query.get(volun_id)
+        volunteer.address_coord = updated_coord
+        volunteer.address = request.form.get('updated_address')
+        db.session.commit()
+        return url_for('pending_deliveries')
+    
+    elif request.method == 'POST':
+        food_donation = DonationFood.query.get(request.form.get('id'))
+        if food_donation:
+            volunteer = User.query.get(food_donation.picked_by)
+            volun_coord = volunteer.address_coord.split(",") if volunteer.address_coord else [0, 0]
+            
+            dono = User.query.get(food_donation.user_id)
+            dono_coord = dono.address_coord.split(",") if dono.address_coord else [0, 0]
+            
+        return render_template('dashboard/home/volunteer-food-more-info.html', food = food_donation,volun_lat=float(volun_coord[0]), 
+                                   volun_lng=float(volun_coord[1]), 
+                                   dono_lat=float(dono_coord[0]), 
+                                   dono_lng=float(dono_coord[1]), dono_addr = dono.address, volun_addr = volunteer.address)
+
+    return 'Invalid METHOD'
+
+@app.route('/dashboard/donation_counts', methods=['GET'])
+@login_required
+def get_donation_counts():
+    if current_user.user_group_id == 2:
+        picked_donation_count = DonationFood.query.filter_by(picked_by=current_user.id).count()
+        
+        # Count of donations with 'success' status among those picked by the volunteer user
+        success_donation = DonationFood.query.filter_by(picked_by=current_user.id, status='delivered')
+        
+        success_donation_count = DonationFood.query.filter_by(picked_by=current_user.id, status='delivered').count()
+        
+        distance_by_month = {month: 0 for month in month_abbr[1:]}
+    
+        for donation in success_donation:
+            # Get the volunteer's coordinates
+            volunteer = User.query.get(donation.picked_by)
+            volun_coord = volunteer.address_coord.split(",") if volunteer.address_coord else [0, 0]
+            volun_lat, volun_lng = map(float, volun_coord)
+            
+            # Get the donor's coordinates
+            donor = User.query.get(donation.user_id)
+            dono_coord = donor.address_coord.split(",") if donor.address_coord else [0, 0]
+            dono_lat, dono_lng = map(float, dono_coord)
+            
+            # Calculate the distance between volunteer and donor locations
+            distance = geodesic((volun_lat, volun_lng), (dono_lat, dono_lng)).kilometers
+            
+            # Get the month and year of the donation
+            donation_month = donation.pickup_time.strftime("%b")
+            
+            # Add the distance to the total distance for the month
+            if donation_month in distance_by_month:
+                distance_by_month[donation_month] += distance
+            else:
+                distance_by_month[donation_month] = distance
+        
+            labels = list(distance_by_month.keys())
+            data = list(distance_by_month.values())
+        
+        # Count of donations with 'pending' status among those picked by the volunteer user
+        pending_donation_count = DonationFood.query.filter_by(picked_by=current_user.id, status='accepted').count()
+        
+        return jsonify({
+            'picked_donation_count': picked_donation_count,
+            'success_donation_count': success_donation_count,
+            'pending_donation_count': pending_donation_count,
+            'labels': labels, 
+            'data' : data
+        })
+    else:
+        return jsonify({'error': 'Unauthorized access'}), 403  # Forbidden
 
 # Volunteer Routes End
 
@@ -337,6 +489,49 @@ def get_user(user_id):
         'created_at': user.created_at.strftime('%Y-%m-%d %H:%M:%S')
     })
     
+@app.route('/get_user_pub/<int:user_id>')
+@login_required
+def get_user_pub(user_id):
+    if current_user.id == user_id:
+        user = User.query.get_or_404(user_id)
+        
+        return jsonify({
+            'id': user.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'about': user.about,
+            'address': user.address,
+            'phone_number': user.phone_number,
+            'created_at': user.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        })
+    else:
+        return 'Unauthorized', 401   
+@app.route('/update_user_pub/<int:user_id>', methods=['POST'])
+@login_required
+def update_user_pub(user_id):
+    if current_user.id == user_id:
+        # Get data from the request form
+        data = request.json
+        user = User.query.get_or_404(user_id)
+        try:
+            # Update volunteer information
+            user.first_name = data.get('first_name')
+            user.last_name = data.get('last_name')
+            user.email = data.get('email')
+            user.address = data.get('address')
+            user.phone_number = data.get('phone_number')
+            user.about = data.get('about')
+            
+            db.session.commit()
+            return 'User information updated successfully', 200
+        except Exception as e:
+            db.session.rollback()
+            return str(e)
+    else:
+        return 'Unauthorized', 401
+    
+
 # Route to delete a volunteer
 @app.route('/delete_user/<int:user_id>', methods=['DELETE'])
 @login_required
@@ -373,6 +568,13 @@ def update_user(user_id):
         db.session.rollback()
         return str(e)
     
+@app.route('/view-posts')
+@login_required
+@admin_required
+def view_posts():
+    blogs = Blog.query.all()
+    return render_template('/dashboard/home/admin-view-blogs.html', blogs= blogs)
+  
 @app.route('/traffic-data')
 @login_required
 @admin_required
@@ -504,16 +706,26 @@ def create_user_groups():
     
     admin_group = UserGroup(name='admin', description='User group for admin')
     db.session.add(admin_group)
-    
-    admin_user = User(username=os.getenv('ADMIN_USERNAME'), first_name='Admin', email='admin@fooddonation.org', last_name='Admin', address='None', organization='Food Donation', password_hash=generate_password_hash(os.getenv('ADMIN_PASSWORD')), user_group_id=3, phone_number=os.getenv('ADMIN_PHONE'))
-    
-    db.session.add(admin_user)
+
     try:
         db.session.commit()
         return "User groups created successfully."
     except Exception as e:
         db.session.rollback()
         return f"Failed to create user groups. {e}"
+    
+@app.route('/init-admin')
+def init_admin():
+    admin_user = User(username=os.getenv('ADMIN_USERNAME'), first_name='Admin', email='admin@fooddonation.org', last_name='Admin', address='None', organization='Food Donation', password_hash=generate_password_hash(os.getenv('ADMIN_PASSWORD')), user_group_id=3, phone_number=os.getenv('ADMIN_PHONE'))
+    
+    db.session.add(admin_user)
+    
+    try:
+        db.session.commit()
+        return "Admin User Creation Successful"
+    except Exception as e:
+        db.session.rollback()
+        return f"Failed to create admin user {e}"
 
 if __name__ == '__main__':
     with app.app_context():

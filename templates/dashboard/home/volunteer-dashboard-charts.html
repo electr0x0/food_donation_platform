@@ -1,75 +1,20 @@
 <script src="/static/assets/js/plugins/chartjs.min.js"></script>
 <script>
-  var ctx = document.getElementById("chart-bars").getContext("2d");
-
-  var indiWeightData = {{ indi_donation_weight | tojson }};
-
-  new Chart(ctx, {
-    type: "pie",
-    data: {
-      labels: ["Fruits", "Vegetables" ,"Food in tins/jars", "Milk and dairy", "Meat, eggs and alternatives", "Breads and cereals", "Prepared and/or cooked meals", "Drinks", "Other"],
-      datasets: [{
-        label: "Amount in KG",
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.7)',
-          'rgba(54, 162, 235, 0.7)',
-          'rgba(255, 206, 86, 0.7)',
-          'rgba(75, 192, 192, 0.7)',
-          'rgba(153, 102, 255, 0.7)',
-          'rgba(255, 102, 255, 0.7)',
-          'rgba(50, 102, 255, 0.7)',
-          'rgba(30, 20, 255, 0.7)',
-          'rgba(25, 155, 55, 0.7)'
-        ],
-        hoverBackgroundColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 102, 255, 1)',
-          'rgba(50, 102, 255, 1)',
-          'rgba(30, 20, 255, 1)',
-          'rgba(25, 155, 55, 1)'
-        ],
-        data: indiWeightData,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: 'rgba(255, 255, 255, 0.8)' // Set label text color
-          },
-          position: 'right'
-        }
-      },
-      animation: {
-        onComplete: () => {
-          delayed = true;
-        },
-        animateRotate: true,
-        animateScale: true
-      },
-    },
-  });
-
-
-
-
-
-  var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
-  fetch('/donation-frequency-data')
+  fetch('/dashboard/donation_counts')
     .then(response => response.json())
-    .then(data => {
+    .then(userinfo => {
+      document.getElementById('donoAccepted').innerText = userinfo.picked_donation_count;
+      document.getElementById('successDonos').innerText = userinfo.success_donation_count;
+      document.getElementById('pendingReqs').innerText = userinfo.pending_donation_count;
+
+      var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
+
       new Chart(ctx3, {
         type: "line",
         data: {
-          labels: data.labels,
+          labels: userinfo.labels,
           datasets: [{
-            label: "Donation Count",
+            label: "Distance in KM",
             tension: 0,
             borderWidth: 0,
             pointRadius: 5,
@@ -79,7 +24,7 @@
             borderWidth: 4,
             backgroundColor: "transparent",
             fill: true,
-            data: data.data,
+            data: userinfo.data,
             maxBarThickness: 6
 
           }],
@@ -91,13 +36,6 @@
             legend: {
               display: false,
             }
-          },
-          animation: {
-            onComplete: () => {
-              delayed = true;
-            },
-            animateRotate: true,
-            animateScale: true
           },
           interaction: {
             intersect: false,
@@ -149,6 +87,11 @@
             },
           },
         },
-      })
+      });
+
     });
+
+
+
+
 </script>

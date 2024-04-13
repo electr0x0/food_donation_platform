@@ -49,7 +49,11 @@ class User(UserMixin, db.Model):
     
     email = db.Column(db.String(250), unique=True, nullable=False)
     
-    address = db.Column(db.String(100), unique=False, nullable=False)
+    about = db.Column(db.String(300), unique=False, nullable=True)
+    
+    address = db.Column(db.String(200), unique=False, nullable=False)
+    
+    address_coord = db.Column(db.String(200), unique=False, nullable=True)
     
     organization = db.Column(db.String(100), unique=False, nullable=True)
     

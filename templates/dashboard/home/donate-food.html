@@ -274,15 +274,14 @@
         <span></span>
         <span></span>
         <!-- Card Header Start -->
-        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-          <div class="bg-gradient-faded-info-vertical shadow-info border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Food Donation Form</h6>
-          </div>
+        <div class="card-header p-xl-8 p-lg-5 p-sm-4 border-radius-lg position-relative mt-n4 mx-3 z-index-2"
+          style="background-image: url('/static/assets/img/banners/header-donate-page.png'); background-size: cover; background-position: center;">
         </div>
         <!-- Card Header End -->
         <div class="card-body">
           <div class="row justify-content-center">
-            <form class="col-lg-12 ms-lg-12 ms-md-10 ms-sm-5" method="post" action="{{url_for('submit_donation')}}" enctype="multipart/form-data">
+            <form class="col-lg-12 ms-lg-12 ms-md-10 ms-sm-5" method="post" action="{{url_for('submit_donation')}}"
+              enctype="multipart/form-data">
               <!-- Form content goes here -->
               <!-- User Information (Auto-filled) -->
               <div class="row mb-3">
@@ -326,15 +325,19 @@
 
                 <!-- Food Type -->
                 <div class="mb-3 row">
-                  <label for="foodType" class="col-sm-3 col-form-label font-weight-bold">Food Type</label>
+                  <label for="foodType" class="col-sm-3 col-form-label font-weight-bold">Food Type*</label>
                   <div class="col-sm-9">
-                    <select class="form-select" id="foodType" name="foodType">
-                      <option selected disabled>Select Food Type</option>
-                      <option value="Fruits">Fruits</option>
-                      <option value="Vegetables">Vegetables</option>
-                      <option value="Grains">Grains</option>
-                      <option value="Dairy">Dairy</option>
-                      <option value="Meat">Meat</option>
+                    <select class="form-select" id="foodType" name="foodType" required>
+                      <option selected disabled>What type of food are you looking to donate?</option>
+                      <option value="Fruits">Fresh fruit</option>
+                      <option value="Vegetables">Fresh Vegetables</option>
+                      <option value="Food in tins, jars or air sealed packages">Food in tins, jars or air sealed packages</option>
+                      <option value="Milk and dairy">Milk and dairy</option>
+                      <option value="Meat, eggs and alternatives">Meat, eggs and alternatives</option>
+                      <option value="Breads and cereals">Breads and cereals</option>
+                      <option value="Prepared and/or cooked meals">Prepared and/or cooked meals</option>
+                      <option value="Drinks">Drinks</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                 </div>
@@ -342,10 +345,10 @@
 
                 <!-- Preferred Pickup/Delivery Time -->
                 <div class="mb-3 row">
-                  <label for="pickupTime" class="col-sm-3 col-form-label font-weight-bold">Preferred Pickup Time</label>
+                  <label for="pickupTime" class="col-sm-3 col-form-label font-weight-bold">Preferred Pickup Time*</label>
                   <div class="col-sm-9">
                     <div class="input-group date" id="pickupTime" data-target-input="nearest">
-                      <input type="datetime-local" id="pickupTime" name="pickupTime">
+                      <input type="datetime-local" id="pickupTime" name="pickupTime" required>
                     </div>
 
                   </div>
@@ -354,10 +357,10 @@
 
                 <!-- Food Weight -->
                 <div class="mb-3 row">
-                  <label for="weight" class="col-sm-3 col-form-label font-weight-bold">Weight (kg)</label>
+                  <label for="weight" class="col-sm-3 col-form-label font-weight-bold">Specify Food Weight (kg)*</label>
                   <div class="col-sm-9">
                     <input type="range" class="form-control form-range" id="weight" name="weight" min="0" max='50'
-                      step="0.1">
+                      step="0.1" required>
                     <label id="weightValue"></label>
                   </div>
                 </div>
@@ -365,9 +368,9 @@
 
                 <!-- Expiry Date -->
                 <div class="mb-3 row">
-                  <label for="expiryDate" class="col-sm-3 col-form-label font-weight-bold">Expiry Date</label>
+                  <label for="expiryDate" class="col-sm-3 col-form-label font-weight-bold">Expiry Date*</label>
                   <div class="col-sm-9">
-                    <input type="date" class="form-control" id="expiryDate" name="expiryDate">
+                    <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
                   </div>
                 </div>
                 <!-- Expiry Date -->
@@ -377,7 +380,7 @@
                   <label for="description" class="col-sm-3 col-form-label font-weight-bold">Description</label>
                   <div class="col-sm-9">
                     <textarea class="form-control" id="description" name="description" rows="3"
-                      placeholder="Enter description"></textarea>
+                      placeholder="Short Description About the Food You Are donating"></textarea>
                   </div>
                 </div>
                 <!-- Food Description -->
@@ -385,7 +388,7 @@
 
                 <!-- Food Image -->
                 <div class="mb-3 row">
-                  <label class="col-sm-3 col-form-label font-weight-bold">Image of the Food</label>
+                  <label class="col-sm-3 col-form-label font-weight-bold">Image of the Food*</label>
                   <div class="col-sm-9">
                     <div class="imagecontainer">
                       <div class="imageheader">
@@ -416,61 +419,72 @@
                           </g>
                         </svg>
                       </label>
-                      <input id="file" name='file' type="file">
+                      <input id="file" name='file' type="file" required>
                     </div>
                   </div>
                 </div>
                 <!-- Food Image -->
 
+                <div class="mb-3 row mt-5">
+                  <label class="checkcontainer">
+                    <input name='terms' type="checkbox">
+                    <svg viewBox="0 0 64 64" height="2em" width="2em">
+                      <path
+                        d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                        pathLength="575.0541381835938" class="path"></path>
+                    </svg>
+                    I agree that If I am donating a high risk food, I am accredited to handle and store the food
+                  </label>
+                </div>
 
-                  <!-- Checkbox for terms and conditions -->
-                  <div class="mb-3 row mt-5">
-                    <label class="checkcontainer">
-                      <input name='terms' type="checkbox">
-                      <svg viewBox="0 0 64 64" height="2em" width="2em">
-                        <path
-                          d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
-                          pathLength="575.0541381835938" class="path"></path>
-                      </svg>
-                      I accept the terms and conditions of selling my soul
-                    </label>
-                  </div>
-                  <!-- Checkbox for terms and conditions -->
+                <!-- Checkbox for terms and conditions -->
+                <div class="mb-3 row mt-1">
+                  <label class="checkcontainer">
+                    <input name='terms' type="checkbox">
+                    <svg viewBox="0 0 64 64" height="2em" width="2em">
+                      <path
+                        d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                        pathLength="575.0541381835938" class="path"></path>
+                    </svg>
+                    I accept the terms and conditions of selling my soul
+                  </label>
+                </div>
+                <!-- Checkbox for terms and conditions -->
 
-                  <!-- modal if not agreed -->
-                  <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog ">
-                      <div class="modal-content bg-dark">
-                        <div class="modal-header">
-                          <h5 class="modal-title text-primary" id="exampleModalLabel">Please accept terms and conditions
-                          </h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          You need to accept terms in order to able to donate food!
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                          <button type="button" data-bs-dismiss="modal"
-                            class="btn bg-gradient-primary mb-0">Close</button>
-                        </div>
+                <!-- modal if not agreed -->
+                <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog ">
+                    <div class="modal-content bg-dark">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-primary" id="exampleModalLabel">Please accept terms and conditions
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        You need to accept terms in order to able to donate food!
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" data-bs-dismiss="modal"
+                          class="btn bg-gradient-primary mb-0">Close</button>
                       </div>
                     </div>
                   </div>
-                  <!-- modal if not agreed -->
+                </div>
+                <!-- modal if not agreed -->
 
 
 
-                  <!-- Submit Button -->
-                  <div class="mb-3 row">
-                    <div class="col-sm-10 offset-sm-0">
-                      <button type="submit" class="bg-gradient-faded-info submit-btn">
-                        Submit Donation
-                        <span></span>
-                      </button>
-                    </div>
+                <!-- Submit Button -->
+                <div class="mb-3 row">
+                  <div class="col-sm-10 offset-sm-0">
+                    <button type="submit" class="bg-gradient-faded-info submit-btn">
+                      Submit Donation
+                      <span></span>
+                    </button>
                   </div>
-                  <!-- Submit Button -->
+                </div>
+                <!-- Submit Button -->
             </form>
           </div>
         </div>
@@ -489,16 +503,16 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const fileInput = document.getElementById('file');
     const preview = document.getElementById('preview');
     const fileInfo = document.querySelector('.imagefooter p');
 
-    fileInput.addEventListener('change', function() {
+    fileInput.addEventListener('change', function () {
       const file = this.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           preview.src = e.target.result;
           fileInfo.textContent = file.name;
         }
