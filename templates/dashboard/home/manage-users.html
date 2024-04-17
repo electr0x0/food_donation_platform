@@ -230,7 +230,7 @@
                     donor.created_at }}</span></span>
               </div>
               <div class="ms-auto text-end">
-                <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i
+                <a data-user-id="{{ donor.id }}" class="btn btn-link text-danger text-gradient px-3 mb-0" delete-user-btn href="javascript:;"><i
                     class="material-icons text-sm me-2">delete</i>Delete</a>
                 <button data-user-id="{{ donor.id }}" class="btn btn-link text-dark px-3 mb-0 edit-btn"><i
                     class="material-icons text-sm me-2">edit</i>Edit</button>
@@ -268,7 +268,7 @@
                     volunteer.created_at }}</span></span>
               </div>
               <div class="ms-auto text-end">
-                <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i
+                <a data-user-id="{{ volunteer.id }}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete-user-btn" href="javascript:;"><i
                     class="material-icons text-sm me-2">delete</i>Delete</a>
                 <button data-user-id="{{ volunteer.id }}" class="btn btn-link text-dark px-3 mb-0 edit-btn"><i
                     class="material-icons text-sm me-2">edit</i>Edit</button>
@@ -345,5 +345,47 @@
       successToast.show();
     }
   });
+</script>
+
+<script>
+  // Function to handle user deletion
+function deleteUser(userId) {
+    // Confirm the user's intention to delete
+    if (confirm("Are you sure you want to delete this user?")) {
+        // Make an AJAX request to delete the user
+        fetch(`/delete_user/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            // Check if the response is successful
+            if (response.ok) {
+                // Reload the page or handle success in any other way
+                location.reload();  // Reload the page to reflect changes
+            } else {
+                // Handle errors
+                console.error('Failed to delete user:', response.statusText);
+                alert('Failed to delete user. Please try again later.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the user. Please try again later.');
+        });
+    }
+}
+
+// Attach click event listener to delete buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-user-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            const userId = this.dataset.userId;
+            deleteUser(userId);
+        });
+    });
+});
 </script>
 {% endblock javascripts %}
